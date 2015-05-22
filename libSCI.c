@@ -5,6 +5,8 @@
  *      Author: jad140230
  */
 
+#include "DSP28x_Project.h"
+
 void scia_init(void) {
     InitSciaGpio();
     /*

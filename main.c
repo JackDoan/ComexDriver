@@ -2,16 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include "DSP28x_Project.h"
-#include "libSCI.c"
-#include "MenuStrings.c"
-#include "bootstrap.c"
-#include "AdcMenu.c"
-#include "PwmMenu.c"
-#include "GpioMenu.c"
+#include "MenuStrings.h"
+#include "bootstrap.h"
+#include "AdcMenu.h"
+#include "PwmMenu.h"
+#include "GpioMenu.h"
+
+
 
 void main()
 {
-
   memcpy(&RamfuncsRunStart, &RamfuncsLoadStart, (size_t)&RamfuncsLoadSize);
   InitSysCtrl();
   InitFlash();
@@ -39,8 +39,3 @@ void main()
   }
 
 }
-
-
-
-
-

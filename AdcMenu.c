@@ -5,7 +5,11 @@
  *      Author: jad140230
  */
 
-void doAdcMenu(void);
+#include "DSP28x_Project.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 
 void doAdcMenu(void) {
 	Uint16 valueADC = 0;

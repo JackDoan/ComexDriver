@@ -9,6 +9,7 @@
 #define DSP28X_PROJECT_H_
 
 #include "f2802x_common/F2802x_Device.h"
-
+#include "libSCI.h"
+#include "MenuStrings.h"
 
 #endif /* DSP28X_PROJECT_H_ */

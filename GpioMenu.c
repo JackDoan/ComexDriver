@@ -5,15 +5,17 @@
  *	  Author: jad140230
  */
 
-void doGpioMenu(void);
-int gpioStatus0 = 0;
-int gpioStatus1 = 0;
-int gpioStatus2 = 0;
-int gpioStatus3 = 0;
+#include "DSP28x_Project.h"
+
+
 
 
 
 void doGpioMenu(void) {
+	int gpioStatus0 = 0;
+	int gpioStatus1 = 0;
+	int gpioStatus2 = 0;
+	int gpioStatus3 = 0;
 	int breakOutOfLoop = 0;
 	while(breakOutOfLoop == 0) {
 	scia_msg(clearScreen);
