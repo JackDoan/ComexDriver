@@ -14,7 +14,6 @@ void main()
   InitSysCtrl();
   InitFlash();
   bootstrap();
-  scia_init();
   while(1) {
 	scia_msg(clearScreen);
     printMenu(mainMenu, 4);

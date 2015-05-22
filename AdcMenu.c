@@ -68,14 +68,14 @@ void doAdcMenu(void) {
 		valueADC = AdcResult.ADCRESULT1; //Get temp sensor sample result
 		snprintf(adcPrint, 20, "%d\r\n", valueADC);
 		scia_msg(adcPrint);
+		/*DELAY_US(32000);
 		DELAY_US(32000);
 		DELAY_US(32000);
 		DELAY_US(32000);
 		DELAY_US(32000);
 		DELAY_US(32000);
 		DELAY_US(32000);
-		DELAY_US(32000);
-		DELAY_US(32000);
+		DELAY_US(32000);*/
 	}
 	return;
 }

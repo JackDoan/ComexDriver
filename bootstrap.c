@@ -32,6 +32,6 @@ void bootstrap() {
 	  EnableInterrupts();
 
 	  EDIS;
-
+	  scia_init();
 }
 
