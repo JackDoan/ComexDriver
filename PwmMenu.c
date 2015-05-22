@@ -10,9 +10,6 @@
 void epwmInit(int freq, int duty) {
 	//InitGpio();
   	InitEPwmGpio();
-//	GpioCtrlRegs.GPADIR.bit.GPIO0 = 1;
-//	GpioCtrlRegs.GPADIR.bit.GPIO1 = 1;
-//	GpioCtrlRegs.GPADIR.bit.GPIO3 = 1;
 	// EPWM Module 1 config
 	EPwm1Regs.TBPRD = freq; // Period = 1500 TBCLK counts
 	EPwm1Regs.TBPHS.half.TBPHS = 0; // Set Phase register to zero
@@ -30,6 +27,7 @@ void epwmInit(int freq, int duty) {
 	EPwm1Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // Active Hi complementary
 	EPwm1Regs.DBFED = 20; // FED = 20 TBCLKs
 	EPwm1Regs.DBRED = 20; // RED = 20 TBCLKs
+
 	// EPWM Module 2 config
 	EPwm2Regs.TBPRD = freq; // Period = 1500 TBCLK counts
 	EPwm2Regs.TBPHS.half.TBPHS = 300; // Phase = 300/1500 * 360 = 120 deg
@@ -72,8 +70,7 @@ void doPwmMenu(void) {
 				if (pwmStatus == 0) {
 					epwmInit(epwmFreq, dutyCycleMult);
 					pwmStatus = 1;
-               				//pwmString2[] = "1) Toggle PWM:           OFF";
-					pwmString2[25] = ' ';
+					pwmString2[25] = ' '; //[1) Toggle PWM:           OFF]
 					pwmString2[26] = 'O';
 					pwmString2[27] = 'N';
 				}
@@ -85,13 +82,12 @@ void doPwmMenu(void) {
   					GpioDataRegs.GPASET.all = 0xFFFF;
 					EDIS;
 					pwmString2[25] = 'O';
-                                        pwmString2[26] = 'F';
-                                        pwmString2[27] = 'F';
+					pwmString2[26] = 'F';
+					pwmString2[27] = 'F';
 				}
 				break;
 			case 0x32:
 				if (pwmStatus == 1) {
-				// prompt for duty cycle
 					char dutyCyclePrompt[] = "Enter the new duty cycle:";
 					int i = 0;
 					int mult = 10;
@@ -128,15 +124,15 @@ void doPwmMenu(void) {
 				}
 				break;
 			case 0x33:
-                                if (pwmStatus == 1) {
+				if (pwmStatus == 1) {
 
-                                }
-                                else {
-                                        scia_msg(pwm_is_kill);
+				}
+				else {
+					scia_msg(pwm_is_kill);
 					read = scia_read();
-                                }
-                                break;
-		}
+				}
+				break;
+        }
 	}
 }
 

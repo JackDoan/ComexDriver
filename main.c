@@ -8,8 +8,6 @@
 #include "PwmMenu.h"
 #include "GpioMenu.h"
 
-
-
 void main()
 {
   memcpy(&RamfuncsRunStart, &RamfuncsLoadStart, (size_t)&RamfuncsLoadSize);
@@ -19,7 +17,7 @@ void main()
   scia_init();
   while(1) {
 	scia_msg(clearScreen);
-    printMenu(mainMenu, 5);
+    printMenu(mainMenu, 4);
 	read = scia_read();
 	switch (read) {
 		case 0x31:
