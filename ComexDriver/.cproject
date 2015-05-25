@@ -80,7 +80,7 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="libF28027;com.ti.ccstudio.buildDefinitions.C2000.Debug.1369674007" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+				<externalSettings containerId="libF28069;com.ti.ccstudio.buildDefinitions.C2000.Debug.451547434" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.ti.ccstudio.buildDefinitions.C2000.Release.1671146180">

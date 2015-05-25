@@ -3,7 +3,7 @@
 	<name>ComexDriver</name>
 	<comment></comment>
 	<projects>
-		<project>libF28027</project>
+		<project>libF28069</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
