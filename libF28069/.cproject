@@ -52,6 +52,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="F2806x_common/lib/SFO_TI_Build_V6b.lib|F2806x_common/lib/IQmath.lib|F2806x_common/lib/2806x_BootROM_API_TABLE_Symbols.lib" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>

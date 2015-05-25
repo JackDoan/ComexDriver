@@ -1,7 +1,4 @@
 //###########################################################################
-// Description:
-//! \addtogroup f2806x_example_list
-//! <h1>eCAP capture PWM (ecap_capture_pwm)</h1>
 //!
 //! This example configures ePWM3A for:
 //! - Up count
@@ -19,13 +16,6 @@
 //! \b Watch \b Variables \n
 //! - \b ECap1PassCount , Successful captures
 //! - \b ECap1IntCount , Interrupt counts
-//
-//###########################################################################
-// $TI Release: F2806x C/C++ Header Files and Peripheral Examples V141 $
-// $Release Date: January 19, 2015 $
-// $Copyright: Copyright (C) 2011-2015 Texas Instruments Incorporated -
-//             http://www.ti.com/ ALL RIGHTS RESERVED $
-//###########################################################################
 
 #include "DSP28x_Project.h"     // Device Headerfile and Examples Include File
 
