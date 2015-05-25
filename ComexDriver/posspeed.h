@@ -18,7 +18,7 @@
 
 #ifndef __POSSPEED__
 #define __POSSPEED__
-
+#include "F2806x_Cla_typedefs.h"
 #include "IQmathLib.h"         // Include header for IQmath library
 /*-----------------------------------------------------------------------------
 Define the structure of the POSSPEED Object

@@ -16,8 +16,8 @@
 //             http://www.ti.com/ ALL RIGHTS RESERVED $
 //###########################################################################
 
+#include <posspeed.h>   // Example specific Include file
 #include "DSP28x_Project.h"     // Device Headerfile and Examples Include File
-#include "Example_posspeed.h"   // Example specific Include file
 
 #define CPU_CLK   80e6
 

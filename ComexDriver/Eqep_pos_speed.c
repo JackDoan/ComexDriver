@@ -1,5 +1,3 @@
-//###########################################################################
-//!
 //! This example provides position measurement,speed measurement using the 
 //! capture unit, and speed measurement using unit time out. This example 
 //! uses the IQMath library. It is used merely to simplify high-precision
@@ -45,15 +43,17 @@
 //!  - qep_posspeed.theta_mech  - Motor mechanical angle (Q15)
 //!  - qep_posspeed.theta_elec  - Motor electrical angle (Q15)
 //
-//###########################################################################
-// $TI Release: F2806x C/C++ Header Files and Peripheral Examples V141 $
-// $Release Date: January 19, 2015 $
-// $Copyright: Copyright (C) 2011-2015 Texas Instruments Incorporated -
-//             http://www.ti.com/ ALL RIGHTS RESERVED $
-//###########################################################################
+
+
+// more info: http://www.ti.com/lit/an/spraah1/spraah1.pdf
+
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "DSP28x_Project.h"     // Device Headerfile and Examples Include File
-#include "Example_posspeed.h"   // Example specific Include file
+#include "posspeed.h"   // Example specific Include file
 
 void initEpwm();
 __interrupt void prdTick(void);
@@ -66,11 +66,8 @@ void main(void)
 
 // Step 1. Initialize System Control:
 // PLL, WatchDog, enable Peripheral Clocks
-// This example function is found in the F2806x_SysCtrl.c file.
    InitSysCtrl();
 // Step 2. Initalize GPIO: 
-// This example function is found in the F2806x_Gpio.c file and
-// illustrates how to set the GPIO to it's default state.
 // InitGpio();  // Skipped for this example  
 
 // For this case only init GPIO for eQEP1 and ePWM1
@@ -81,33 +78,23 @@ void main(void)
    GpioCtrlRegs.GPADIR.bit.GPIO4 = 1;    // GPIO4 as output simulates Index signal
    GpioDataRegs.GPACLEAR.bit.GPIO4 = 1;  // Normally low  
    EDIS;
-// Step 3. Clear all interrupts and initialize PIE vector table:
-// Disable CPU interrupts 
    DINT;
-
-// Initialize the PIE control registers to their default state.
-// The default state is all PIE interrupts disabled and flags
-// are cleared.  
-// This function is found in the F2806x_PieCtrl.c file.
-   InitPieCtrl();
+   InitPieCtrl(); // The default state is all PIE interrupts disabled and flags are cleared.
    
 // Disable CPU interrupts and clear all CPU interrupt flags:
    IER = 0x0000;
    IFR = 0x0000;
 
-// Initialize the PIE vector table with pointers to the shell Interrupt 
-// Service Routines (ISR).  
+// Initialize the PIE vector table with pointers to the shell ISRs.
 // This will populate the entire table, even if the interrupt
 // is not used in this example.  This is useful for debug purposes.
 // The shell ISR routines are found in F2806x_DefaultIsr.c.
-// This function is found in F2806x_PieVect.c.
    InitPieVectTable();
 
-// Interrupts that are used in this example are re-mapped to
-// ISR functions found within this file.  
-   EALLOW;  // This is needed to write to EALLOW protected registers
+// Interrupts that are used in this example are re-mapped to our ISR functions
+   EALLOW;
    PieVectTable.EPWM1_INT= &prdTick;
-   EDIS;    // This is needed to disable write to EALLOW protected registers
+   EDIS;
 
 // Step 4. Initialize all the Device Peripherals:
    initEpwm();  // This function exists in Example_EPwmSetup.c
@@ -142,7 +129,7 @@ __interrupt void prdTick(void)                  // EPWM1 Interrupts once every 4
    {   
        EALLOW;
        GpioDataRegs.GPASET.bit.GPIO4 = 1;     // Pulse Index signal  (1 pulse/rev.)
-       for (i=0; i<700; i++){                
+       for (i=0; i<700; i++){                 //################TODO What on earth is this for?
        }
        GpioDataRegs.GPACLEAR.bit.GPIO4 = 1;
 	   Interrupt_Count = 0;                   // Reset count
