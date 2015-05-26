@@ -125,10 +125,13 @@ void POSSPEED_Calc(POSSPEED *p)
      p->DirectionQep = EQep1Regs.QEPSTS.bit.QDF;    // Motor direction: 0=CCW/reverse, 1=CW/forward
 
      pos16bval=(unsigned int)EQep1Regs.QPOSCNT;     // capture position once per QA/QB period
-     p->theta_raw = pos16bval+ p->cal_angle;        // raw theta = current pos. + ang. offset from QA
+     // ^^^^ EQep1Regs.QPOSCNT is just a straight-up counter that can define current position. How cool is that?!
+     p->theta_raw = pos16bval+ p->cal_angle;        // raw theta = current pos. + cal_angle (simply an offset)
 
      // The following lines calculate p->theta_mech ~= QPOSCNT/mech_scaler [current cnt/(total cnt in 1 rev.)]
      // where mech_scaler = 4000 cnts/revolution
+
+     // all these bitshifts & bitwise operations are shortcuts/simplifications to the IQMath functions
      tmp = (long)((long)p->theta_raw*(long)p->mech_scaler);     // Q0*Q26 = Q26
      tmp &= 0x03FFF000;
      p->theta_mech = (int)(tmp>>11);                // Q26 -> Q15
