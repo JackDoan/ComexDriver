@@ -38,6 +38,13 @@ void doAdcMenu(void) {
 	AdcRegs.ADCSOC13CTL.bit.ACQPS = ACQPS_Value;
 	AdcRegs.ADCSOC14CTL.bit.ACQPS = ACQPS_Value;
 	AdcRegs.ADCSOC15CTL.bit.ACQPS = ACQPS_Value;
+	AdcRegs.ADCCTL1.bit.TEMPCONV = 0; //Connect A5 - temp sensor
+	AdcRegs.ADCSOC0CTL.bit.CHSEL = 14; //Set SOC0 to sample A5
+	AdcRegs.ADCSOC1CTL.bit.CHSEL = 14; //Set SOC1 to sample A5
+	AdcRegs.ADCSOC0CTL.bit.ACQPS = 6; //Set SOC0 ACQPS to 7 ADCCLK
+	AdcRegs.ADCSOC1CTL.bit.ACQPS = 6; //Set SOC1 ACQPS to 7 ADCCLK
+	AdcRegs.INTSEL1N2.bit.INT1SEL = 1; //Connect ADCINT1 to EOC1
+	AdcRegs.INTSEL1N2.bit.INT1E = 1; //Enable ADCINT1
 
 	EDIS;
 	scia_msg(clearScreen);
@@ -52,15 +59,7 @@ void doAdcMenu(void) {
 		//scia_PrintLF();
 
 		// Configure the ADC to sample the temperature sensor
-		EALLOW;
-		AdcRegs.ADCCTL1.bit.TEMPCONV = 0; //Connect A5 - temp sensor
-		AdcRegs.ADCSOC0CTL.bit.CHSEL = 14; //Set SOC0 to sample A5
-		AdcRegs.ADCSOC1CTL.bit.CHSEL = 14; //Set SOC1 to sample A5
-		AdcRegs.ADCSOC0CTL.bit.ACQPS = 6; //Set SOC0 ACQPS to 7 ADCCLK
-		AdcRegs.ADCSOC1CTL.bit.ACQPS = 6; //Set SOC1 ACQPS to 7 ADCCLK
-		AdcRegs.INTSEL1N2.bit.INT1SEL = 1; //Connect ADCINT1 to EOC1
-		AdcRegs.INTSEL1N2.bit.INT1E = 1; //Enable ADCINT1
-		EDIS;
+
 		// Sample the temperature sensor
 		AdcRegs.ADCSOCFRC1.all = 0xFF; //Sample temp sensor
 		while(AdcRegs.ADCINTFLG.bit.ADCINT1 == 0){} //Wait for ADCINT1
