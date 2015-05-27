@@ -130,12 +130,12 @@ void POSSPEED_Calc(POSSPEED *p)
 
      // The following lines calculate p->theta_mech ~= QPOSCNT/mech_scaler [current cnt/(total cnt in 1 rev.)]
      // where mech_scaler = 4000 cnts/revolution
-
+     p->theta_mech = p->theta_raw
      // all these bitshifts & bitwise operations are shortcuts/simplifications to the IQMath functions
-     tmp = (long)((long)p->theta_raw*(long)p->mech_scaler);     // Q0*Q26 = Q26
-     tmp &= 0x03FFF000;
-     p->theta_mech = (int)(tmp>>11);                // Q26 -> Q15
-     p->theta_mech &= 0x7FFF;
+     //tmp = (long)((long)p->theta_raw*(long)p->mech_scaler);     // Q0*Q26 = Q26
+    // tmp &= 0x03FFF000;
+    // p->theta_mech = (int)(tmp>>11);                // Q26 -> Q15
+    // p->theta_mech &= 0x7FFF;
 
      // The following lines calculate p->elec_mech
      p->theta_elec = p->pole_pairs*p->theta_mech;  // Q0*Q15 = Q15

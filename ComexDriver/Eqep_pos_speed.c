@@ -33,8 +33,8 @@
 //!      overflow at the required minimum RPM speed.
 //!
 //! \b External \b Connections \n
-//!   - Connect eQEP1A(GPIO20) to ePWM1A(GPIO0)(simulates eQEP Phase A signal) 
-//!   - Connect eQEP1B(GPIO21) to ePWM1B(GPIO1)(simulates eQEP Phase B signal)
+//!   - Connect eQEP1A(GPIO20) to ePWM1A(GPIO0)(simulates eQEP Phase A signal) J4-40 -> J5-45
+//!   - Connect eQEP1B(GPIO21) to ePWM1B(GPIO1)(simulates eQEP Phase B signal) J4-41 -> J5-48
 //!   - Connect eQEP1I(GPIO23) to GPIO4 (simulates eQEP Index Signal)
 //!
 //! \b Watch \b Variables \n

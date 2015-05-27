@@ -28,12 +28,12 @@ typedef struct {int theta_elec;         // Output: Motor Electrical angle (Q15)
                 int DirectionQep;       // Output: Motor rotation direction (Q0)
                 int QEP_cnt_idx;        // Variable: Encoder counter index (Q0)
                 int theta_raw;          // Variable: Raw angle from Timer 2 (Q0)
-                int mech_scaler;        // Parameter: 0.9999/total count, total count = 4000 (Q26)
+                int mech_scaler;        // Parameter: 0.9999/total count, total count = 6400 (Q26)
                 int pole_pairs;         // Parameter: Number of pole pairs (Q0)
                 int cal_angle;          // Parameter: Raw angular offset between encoder and phase a (Q0)
                 int index_sync_flag;    // Output: Index sync status (Q0)
 
-                Uint32 SpeedScaler;     // Parameter :  Scaler converting 1/N cycles to a GLOBAL_Q speed (Q0) - independently with global Q
+                Uint32 SpeedScaler;     // Parameter :  Scaler converting 1/N cycles to a GLOBAL_Q speed (Q0) - independently with global Q ///CALCULATE THIS
                 _iq Speed_pr;           // Output :  speed in per-unit
                 Uint32 BaseRpm;         // Parameter : Scaler converting GLOBAL_Q speed to rpm (Q0) speed - independently with global Q
                 int32 SpeedRpm_pr;      // Output : speed in r.p.m. (Q0) - independently with global Q
@@ -52,9 +52,9 @@ typedef POSSPEED *POSSPEED_handle;
 
 /*-----------------------------------------------------------------------------
 Default initializer for the POSSPEED Object.
------------------------------------------------------------------------------*/
-  #define POSSPEED_DEFAULTS {0x0, 0x0,0x0,0x0,0x0,16776,2,0,0x0,\
-        100,0,6000,0,\
+-----------------------------------------------------------------------------*/ //check the value for mech_scalar (6400*4?)
+  #define POSSPEED_DEFAULTS {0x0, 0x0,0x0,0x0,0x0,25600,12,0,0x0,\
+        100,0,3200,0,\
         0,0,0,\
         (void (*)(long))POSSPEED_Init,\
         (void (*)(long))POSSPEED_Calc }
