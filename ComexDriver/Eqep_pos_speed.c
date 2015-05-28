@@ -46,6 +46,7 @@
 
 
 // more info: http://www.ti.com/lit/an/spraah1/spraah1.pdf
+// pins http://www.ti.com/lit/ug/sprui11/sprui11.pdf
 
 #include <stdint.h>
 #include <stdio.h>
@@ -125,7 +126,7 @@ __interrupt void prdTick(void)                  // EPWM1 Interrupts once every 4
    
    // Control loop code for position control & Speed contol
    Interrupt_Count++;
-   if (Interrupt_Count==1000)                 // Every 1000 interrupts(4000 QCLK counts or 1 rev.)
+   if (Interrupt_Count==6399)                 // Every 6400 interrupts(25600 QCLK counts or 1 rev.)
    {   
        EALLOW;
        GpioDataRegs.GPASET.bit.GPIO4 = 1;     // Pulse Index signal  (1 pulse/rev.)
