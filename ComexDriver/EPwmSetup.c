@@ -1,20 +1,7 @@
-//###########################################################################
-//
-// FILE:	Example_EpwmSetup.c
-//
 // TITLE:	Pos speed measurement using EQEP peripheral
-//
-// DESCRIPTION:
 //
 // This file contains source for the ePWM initialization for the 
 // pos/speed module
-//
-//###########################################################################
-// $TI Release: F2806x C/C++ Header Files and Peripheral Examples V141 $ 
-// $Release Date: January 19, 2015 $ 
-// $Copyright: Copyright (C) 2011-2015 Texas Instruments Incorporated -
-//             http://www.ti.com/ ALL RIGHTS RESERVED $
-//###########################################################################
 
 #include <posspeed.h>   // Example specific Include file
 #include "DSP28x_Project.h"     // Device Headerfile and Examples Include File

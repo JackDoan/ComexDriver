@@ -1,68 +1,61 @@
-//###########################################################################
-//
-// FILE:    Example_posspeed.h
-//
 // TITLE:   Pos/speed measurement using EQEP peripheral
-//
-// DESCRIPTION:
-//
 // Header file containing data type and object definitions and
 // initializers.
-//
-//###########################################################################
-// $TI Release: F2806x C/C++ Header Files and Peripheral Examples V141 $ 
-// $Release Date: January 19, 2015 $ 
-// $Copyright: Copyright (C) 2011-2015 Texas Instruments Incorporated -
-//             http://www.ti.com/ ALL RIGHTS RESERVED $
-//###########################################################################
 
 #ifndef __POSSPEED__
 #define __POSSPEED__
 #include "F2806x_Cla_typedefs.h"
-//#include "IQmathLib.h"         // Include header for IQmath library
-/*-----------------------------------------------------------------------------
-Define the structure of the POSSPEED Object
------------------------------------------------------------------------------*/
-typedef struct {float theta_elec;         // Output: Motor Electrical angle (Q15)
-                float theta_mech;         // Output: Motor Mechanical Angle (Q15)
-                int DirectionQep;       // Output: Motor rotation direction (Q0)
-                int QEP_cnt_idx;        // Variable: Encoder counter index (Q0)
-                unsigned int theta_raw;          // Variable: Raw angle from Timer 2 (Q0)
-                int mech_scaler;        // Parameter: 0.9999/total count, total count = 6400 (Q26)
-                int pole_pairs;         // Parameter: Number of pole pairs (Q0)
-                int cal_angle;          // Parameter: Raw angular offset between encoder and phase a (Q0)
-                int index_sync_flag;    // Output: Index sync status (Q0)
 
-                Uint32 SpeedScaler;     // Parameter :  Scaler converting 1/N cycles to a GLOBAL_Q speed (Q0) - independently with global Q ///CALCULATE THIS
-                float Speed_pr;           // Output :  speed in per-unit
-                Uint32 BaseRpm;         // Parameter : Scaler converting GLOBAL_Q speed to rpm (Q0) speed - independently with global Q
+//Define the structure of the POSSPEED Object
+typedef struct {float theta_elec;       // Output: Motor Electrical angle
+                float theta_mech;       // Output: Motor Mechanical Angle
+                int DirectionQep;       // Output: Motor rotation direction
+                int QEP_cnt_idx;        // Variable: Encoder counter index
+                unsigned int theta_raw;          // Variable: Raw angle from Timer 2
+                int mech_scaler;        // Parameter: 0.9999/total count, total count = 6400
+                int pole_pairs;         // Parameter: Number of pole pairs (Q0)
+                int cal_angle;          // Parameter: Raw angular offset between encoder and phase A
+                int index_sync_flag;    // Output: Index sync status
+
+                Uint32 SpeedScaler;     // Parameter :  Scalar converting 1/N cycles to a speed ///CALCULATE THIS
+                float Speed_pr;         // Output :  speed in per-unit
+                Uint32 BaseRpm;         // Parameter : maximum RPM
                 int32 SpeedRpm_pr;      // Output : speed in r.p.m. (Q0) - independently with global Q
 
-                float  oldpos;            // Input: Electrical angle (pu)
-                float Speed_fr;           // Output :  speed in per-unit
-                int32 SpeedRpm_fr;      // Output : Speed in rpm  (Q0) - independently with global Q
+                float  oldpos;          // Input: Electrical angle (pu)
+                float Speed_fr;         // Output :  speed in per-unit
+                int32 SpeedRpm_fr;      // Output : Speed in rpm
                 void (*init)();         // Pointer to the init funcion
                 void (*calc)();         // Pointer to the calc funtion
                 }  POSSPEED;
 
-/*-----------------------------------------------------------------------------
-Define a POSSPEED_handle
------------------------------------------------------------------------------*/
+//Default initializer for the POSSPEED Object.
+#define POSSPEED_DEFAULTS {\
+	0x0,\
+	0x0,\
+	0x0,\
+	0x0,\
+	0x0,\
+	25600,\
+	12,\
+	0,\
+	0x0,\
+    80,\
+	0,\
+	3200,\
+	0,\
+    0,\
+	0,\
+	0,\
+   (void (*)(long))POSSPEED_Init, (void (*)(long))POSSPEED_Calc}  //pointers to functions
+
+
+//Define a POSSPEED_handle
+
 typedef POSSPEED *POSSPEED_handle;
 
-/*-----------------------------------------------------------------------------
-Default initializer for the POSSPEED Object.
------------------------------------------------------------------------------*/ //check the value for mech_scalar (6400*4?)
-  #define POSSPEED_DEFAULTS {0x0, 0x0,0x0,0x0,0x0,25600,12,0,0x0,\
-        188,0,3200,0,\
-        0,0,0,\
-        (void (*)(long))POSSPEED_Init,\
-        (void (*)(long))POSSPEED_Calc }
 
-
-/*-----------------------------------------------------------------------------
-Prototypes for the functions in posspeed.c
------------------------------------------------------------------------------*/
+//Prototypes for the functions in posspeed.c
 void POSSPEED_Init(void);
 void POSSPEED_Calc(POSSPEED_handle);
 
