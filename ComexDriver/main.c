@@ -33,16 +33,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ecap.h"
 #include "DSP28x_Project.h"     // Device Headerfile and Examples Include File
 #include "posspeed.h"   // Example specific Include file
+#include "ecap.h"
+#include "libSCI.h"
 
-/*
-extern __interrupt void ecap1_isr(void);
-extern __interrupt void ecap2_isr(void);
-extern __interrupt void ecap3_isr(void);
-extern void InitECapRegs(void);
-*/
 POSSPEED qep_posspeed=POSSPEED_DEFAULTS;
 
 void main(void) {
@@ -60,6 +55,7 @@ void main(void) {
    InitECap1Gpio();
    InitECap2Gpio();
    InitECap3Gpio();
+   scia_init();
 
    DINT;
    InitPieCtrl(); // The default state is all PIE interrupts disabled and flags are cleared.
@@ -101,6 +97,9 @@ void main(void) {
   	
 	while(1) {
 		qep_posspeed.calc(&qep_posspeed);
+		if (readHallStateFlag)
+			updateHallState();
+
 	}
 
 } 

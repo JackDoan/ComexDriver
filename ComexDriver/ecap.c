@@ -182,6 +182,7 @@ __interrupt void ecap1_isr(void)
    GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 3; // Back to capture mode   GPIO5 as ecap
    EDIS;
    // Acknowledge this interrupt to receive more interrupts from group 4
+   readHallStateFlag = 1;
    PieCtrlRegs.PIEACK.all = PIEACK_GROUP4;
 }
 
@@ -204,6 +205,7 @@ __interrupt void ecap2_isr(void)
    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 1; // Back to capture mode   GPIO25 as ecap
    EDIS;
    // Acknowledge this interrupt to receive more interrupts from group 4
+   readHallStateFlag = 1;
    PieCtrlRegs.PIEACK.all = PIEACK_GROUP4;
 }
 
@@ -226,5 +228,6 @@ __interrupt void ecap3_isr(void)
    GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 1; // Back to capture mode   GPIO26 as ecap
    EDIS;
    // Acknowledge this interrupt to receive more interrupts from group 4
+   readHallStateFlag = 1;
    PieCtrlRegs.PIEACK.all = PIEACK_GROUP4;
 }

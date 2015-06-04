@@ -12,6 +12,7 @@ __interrupt void ecap1_isr(void);
 __interrupt void ecap2_isr(void);
 __interrupt void ecap3_isr(void);
 void InitECapRegs(void);
+void updateHallState();
 
 extern int HallsensorA;
 extern int HallsensorB;

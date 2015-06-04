@@ -8,7 +8,7 @@
 #ifndef LIBSCI_H_
 #define LIBSCI_H_
 
-
+#include "DSP28x_Project.h"
 Uint16 scia_read(void);
 
 void scia_init(void);
