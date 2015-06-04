@@ -1,5 +1,5 @@
 //! Note:
-//!    - Maximum speed is configured to 3200rpm(BaseRpm)
+//!    - Maximum speed is configured to 6000rpm(BaseRpm)
 //!    - Minimum speed is assumed at 10rpm for capture pre-scalar selection
 //!    - Pole pair is configured to 12 (pole_pairs)
 //!    - QEP Encoder resolution is configured to 25600counts/revolution (mech_scaler)
@@ -16,8 +16,9 @@
 //!      overflow at the required minimum RPM speed.
 //!
 //!  External Connections
-//!   - Connect eQEP1A(GPIO20) J5-45
-//!   - Connect eQEP1B(GPIO21) J5-48
+//!   - Connect eQEP1A(GPIO20) to ePWM1A(GPIO0)(simulates eQEP Phase A signal) J4-40 -> J5-45
+//!   - Connect eQEP1B(GPIO21) to ePWM1B(GPIO1)(simulates eQEP Phase B signal) J4-41 -> J5-48
+//!   - Connect eQEP1I(GPIO23) to GPIO4 (simulates eQEP Index Signal)
 //!
 //!  Watch Variables
 //!  - qep_posspeed.SpeedRpm_fr - Speed meas. in rpm using QEP position counter
@@ -33,34 +34,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ecap.h"
+
 #include "DSP28x_Project.h"     // Device Headerfile and Examples Include File
 #include "posspeed.h"   // Example specific Include file
 
-/*
-extern __interrupt void ecap1_isr(void);
-extern __interrupt void ecap2_isr(void);
-extern __interrupt void ecap3_isr(void);
-extern void InitECapRegs(void);
-*/
-POSSPEED qep_posspeed=POSSPEED_DEFAULTS;
+void initEpwm();
+__interrupt void prdTick(void);
 
-void main(void) {
-   memcpy(&RamfuncsRunStart, &RamfuncsLoadStart, (size_t)&RamfuncsLoadSize);
+POSSPEED qep_posspeed=POSSPEED_DEFAULTS;
+Uint16 Interrupt_Count = 0;
+
+void main(void)
+{
+
 // Step 1. Initialize System Control:
 // PLL, WatchDog, enable Peripheral Clocks
    InitSysCtrl();
-   InitFlash();
 // Step 2. Initalize GPIO: 
-// InitGpio();  // Skipped; not needed
+// InitGpio();  // Skipped for this example  
+
+// For this case only init GPIO for eQEP1 and ePWM1
+// This function is found in F2806x_EQep.c
    InitEQep1Gpio();
    InitEPwm1Gpio();
-   InitEPwm2Gpio();
-   InitEPwm3Gpio();
-   InitECap1Gpio();
-   InitECap2Gpio();
-   InitECap3Gpio();
-
+   EALLOW;
+   GpioCtrlRegs.GPADIR.bit.GPIO4 = 1;    // GPIO4 as output simulates Index signal
+   GpioDataRegs.GPACLEAR.bit.GPIO4 = 1;  // Normally low  
+   EDIS;
    DINT;
    InitPieCtrl(); // The default state is all PIE interrupts disabled and flags are cleared.
    
@@ -76,33 +76,38 @@ void main(void) {
 
 // Interrupts that are used in this example are re-mapped to our ISR functions
    EALLOW;
-   PieVectTable.ECAP1_INT = &ecap1_isr;  // Group 4 PIE Peripheral Vectors
-   PieVectTable.ECAP2_INT = &ecap2_isr;	 // ''
-   PieVectTable.ECAP3_INT = &ecap3_isr;  // ''
+   PieVectTable.EPWM1_INT= &prdTick;
    EDIS;
 
 // Step 4. Initialize all the Device Peripherals:
-   //initEpwm();  // This function exists in Example_EPwmSetup.c
-   InitECapRegs();
+   initEpwm();  // This function exists in Example_EPwmSetup.c
    
-// Step 5. Enable interrupts:
-   IER |= M_INT4; // Enable CPU INT4 which is connected to ECAP1-4 INT
-   IER |= M_INT3; // Enable CPU INT1 which is connected to CPU-Timer 0:
+// Step 5. User specific code, enable interrupts:
+// Enable CPU INT1 which is connected to CPU-Timer 0:
+   IER |= M_INT3;
 
-   PieCtrlRegs.PIEIER4.bit.INTx1 = 1;      // INT4.1 for ecap1
-   PieCtrlRegs.PIEIER4.bit.INTx2 = 1;      // INT4.2 for ecap2
-   PieCtrlRegs.PIEIER4.bit.INTx3 = 1;      // INT4.3 for ecap3
-
+// Enable TINT0 in the PIE: Group 3 interrupt 1
+   //PieCtrlRegs.PIEIER3.bit.INTx1 = 1;
+   PieCtrlRegs.PIEIER3.bit.INTx1 = 0;
 // Enable global Interrupts and higher priority real-time debug events:
    EINT;   // Enable Global interrupt INTM
    ERTM;   // Enable Global realtime interrupt DBGM
    
    qep_posspeed.init(&qep_posspeed);
   	
-	while(1) {
+	for(;;)
+	{
 		qep_posspeed.calc(&qep_posspeed);
 	}
 
 } 
 
+__interrupt void prdTick(void)                  // EPWM1 Interrupts once every 4 QCLK counts (one period)
+{
+   // Position and Speed measurement
+   qep_posspeed.calc(&qep_posspeed);
+   // Acknowledge this interrupt to receive more interrupts from group 1
+   PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
+   EPwm1Regs.ETCLR.bit.INT=1;
+}
 

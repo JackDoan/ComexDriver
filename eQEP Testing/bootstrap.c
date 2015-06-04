@@ -12,6 +12,14 @@ void bootstrap() {
 	  EALLOW;
 	  IER = 0x0000; // Disable CPU interrupts
 	  IFR = 0x0000; // Clear all CPU interrupt flags
+	  GpioCtrlRegs.GPAMUX1.all = 0x0000;
+	  GpioCtrlRegs.GPAMUX2.all = 0x0000;
+	  GpioCtrlRegs.GPBMUX1.all = 0x0000;
+	  GpioCtrlRegs.AIOMUX1.all = 0x0000;
+	  GpioCtrlRegs.AIODIR.all = 0x0000;
+	  GpioDataRegs.GPASET.all = 0xFFFF;
+	  GpioCtrlRegs.GPADIR.all = 0xFFFF;
+
 	  DINT;
 	  InitPieCtrl();
 	  //PieCtrlRegs.PIEIER1.bit.INTx7 = 1;

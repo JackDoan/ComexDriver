@@ -1,0 +1,16 @@
+We're going to need some sort of differential line reciever to decode the encoder's signals. Buy or build?
+	Needs to determine if A+ < or > A-
+	ordered samples from Maxim to cover it foe now (5/25/15) (RS422 recievers)
+	
+
+eQEP Docs: http://www.ti.com/lit/ug/spru790d/spru790d.pdf
+
+Notice how the eQEP example is just an ISR. This makes it trivial to have it almost seamlessly update 
+a value in memory, and the rest of the program can continue, blissfully unaware of what's happening.
+
+"Phase Error Flag— In normal operating conditions, quadrature inputs QEPA and QEPB will be 90
+degrees out of phase. The phase error flag (PHE) is set in the QFLG register when edge transition
+is detected simultaneously on the QEPA and QEPB signals to optionally generate interrupts. State
+transitions marked by dashed lines in Figure 6 are invalid transitions that generate a phase error."
+** write code to handle this interrupt. shut down motor & write to console / blink LED
+
