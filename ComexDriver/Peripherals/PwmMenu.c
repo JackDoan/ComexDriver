@@ -25,7 +25,7 @@ void epwmInit(int freq, int duty) {
 	EPwm1Regs.AQCTLA.bit.CAD = AQ_CLEAR;
 	EPwm1Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // enable Dead-band module
 	EPwm1Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // Active Hi complementary
-	EPwm1Regs.DBFED = 20; // FED = 20 TBCLKs
+	EPwm1Regs.DBFED = 20; // FED = 20 TBCLKs  Target value = ~1us
 	EPwm1Regs.DBRED = 20; // RED = 20 TBCLKs
 
 	// EPWM Module 2 config
