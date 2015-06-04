@@ -11,9 +11,17 @@
 //! - \b Hallsensor state A/B/C
 
 #include "DSP28x_Project.h"     // Device Headerfile and Examples Include File
-#include "ecap.h"
 
+__interrupt void ecap1_isr(void);
+__interrupt void ecap2_isr(void);
+__interrupt void ecap3_isr(void);
+void InitECapRegs(void);
 
+int HallsensorA;
+int HallsensorB;
+int HallsensorC;
+int Electrical_angle;
+int readHallStateFlag;
 // Initialize counters:
 
 

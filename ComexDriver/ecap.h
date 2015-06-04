@@ -13,11 +13,11 @@ __interrupt void ecap2_isr(void);
 __interrupt void ecap3_isr(void);
 void InitECapRegs(void);
 
-int HallsensorA;
-int HallsensorB;
-int HallsensorC;
-int Electrical_angle;
-int readHallStateFlag;
+extern int HallsensorA;
+extern int HallsensorB;
+extern int HallsensorC;
+extern int Electrical_angle;
+extern int readHallStateFlag;
 
 
 
