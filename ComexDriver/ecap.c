@@ -168,7 +168,7 @@ __interrupt void ecap1_isr(void)
 {
    EALLOW;
    GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 0;	         //  GPIO5 as I/O
-   GpioCtrlRegs.GPADIR.bit.GPIO5 = 0;
+   GpioCtrlRegs.GPADIR.bit.GPIO5 = 0;            //  GPIO5 as input
    EDIS;
    HallsensorA = GpioDataRegs.GPADAT.bit.GPIO5;  // read th signal from GPIO5
 
@@ -191,7 +191,7 @@ __interrupt void ecap2_isr(void)
 {
    EALLOW;
    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 0;	         //  GPIO25 as I/O
-   GpioCtrlRegs.GPADIR.bit.GPIO25 = 0;
+   GpioCtrlRegs.GPADIR.bit.GPIO25 = 0;          //   GPIO25 as input
    EDIS;
    HallsensorA = GpioDataRegs.GPADAT.bit.GPIO25;  // read th signal from GPIO25
 
@@ -213,10 +213,10 @@ __interrupt void ecap2_isr(void)
 __interrupt void ecap3_isr(void)
 {
    EALLOW;
-   GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 0;	         //  GPIO5 as I/O
-   GpioCtrlRegs.GPADIR.bit.GPIO26 = 0;
+   GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 0;	         //  GPIO26 as I/O
+   GpioCtrlRegs.GPADIR.bit.GPIO26 = 0;           //  GPIO26 as input
    EDIS;
-   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO26;  // read th signal from GPIO5
+   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO26;  // read th signal from GPIO26
 
    ECap3Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
    ECap3Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
