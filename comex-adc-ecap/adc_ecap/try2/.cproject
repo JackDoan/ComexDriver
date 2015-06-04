@@ -6,10 +6,10 @@
 				<macros>
 					<stringMacro name="INSTALLROOT_HCCAL_VERSION" type="VALUE_PATH_DIR" value="${ORIGINAL_PROJECT_ROOT}/../../../../../libs/utilities/hrcap_hccal/type0/v110"/>
 					<stringMacro name="INSTALLROOT_F2806x_V141_TO_MWARE" type="VALUE_PATH_DIR" value="${ORIGINAL_PROJECT_ROOT}/../../MWare"/>
-					<stringMacro name="INSTALLROOT_FASTRTS_V100" type="VALUE_PATH_DIR" value="${ORIGINAL_PROJECT_ROOT}/../../../../../libs/math/FPUfastRTS/V100"/>
 					<stringMacro name="INSTALLROOT_F2806x_V141" type="VALUE_PATH_DIR" value="${ORIGINAL_PROJECT_ROOT}/../.."/>
-					<stringMacro name="ORIGINAL_PROJECT_ROOT" type="VALUE_PATH_DIR" value="C:/ti/controlSUITE/device_support/f2806x/v141/F2806x_examples_ccsv5/ecap_capture_pwm"/>
+					<stringMacro name="INSTALLROOT_FASTRTS_V100" type="VALUE_PATH_DIR" value="${ORIGINAL_PROJECT_ROOT}/../../../../../libs/math/FPUfastRTS/V100"/>
 					<stringMacro name="INSTALLROOT_IQMATH_V160" type="VALUE_PATH_DIR" value="${ORIGINAL_PROJECT_ROOT}/../../../../../libs/math/IQmath/v160"/>
+					<stringMacro name="ORIGINAL_PROJECT_ROOT" type="VALUE_PATH_DIR" value="C:/ti/controlSUITE/device_support/f2806x/v141/F2806x_examples_ccsv5/ecap_capture_pwm"/>
 				</macros>
 				<externalSettings/>
 				<extensions>
@@ -49,7 +49,6 @@
 								<option id="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.DEBUGGING_MODEL.627369582" name="Debugging model" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.DEBUGGING_MODEL" value="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.DEBUGGING_MODEL.SYMDEBUG__DWARF" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.INCLUDE_PATH.97465951" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
-<<<<<<< HEAD
 									<listOptionValue builtIn="false" value="&quot;${INSTALLROOT_F2806x_V141}/F2806x_headers/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${INSTALLROOT_F2806x_V141}/F2806x_common/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${INSTALLROOT_IQMATH_V160}/include&quot;"/>
@@ -58,13 +57,6 @@
 								<option id="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.DEFINE.2106122821" name="Pre-define NAME (--define, -D)" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.DEFINE" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="&quot;_DEBUG&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;LARGE_MODEL&quot;"/>
-=======
-									<listOptionValue builtIn="false" value="&quot;C:\Users\krystal\Documents\GitHub\ComexDriver\TRY2&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\krystal\Documents\GitHub\ComexDriver\TRY2\f2802x_common\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\krystal\Documents\GitHub\ComexDriver\TRY2\f2802x_common\source&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${PROJECT_ROOT}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${PROJECT_ROOT}/../libf28027&quot;"/>
->>>>>>> origin/master
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.QUIET_LEVEL.617987226" name="Quiet Level" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.QUIET_LEVEL" value="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.QUIET_LEVEL.QUIET" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.VERBOSE_DIAGNOSTICS.2029582097" name="Verbose diagnostics (--verbose_diagnostics, -pdv)" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.2.compilerID.VERBOSE_DIAGNOSTICS" value="true" valueType="boolean"/>
@@ -96,7 +88,6 @@
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.C2000_6.2.linkerID.SEARCH_PATH.1317743544" name="Add &lt;dir&gt; to library search path (--search_path, -i)" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.2.linkerID.SEARCH_PATH" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/lib&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\krystal\Documents\GitHub\ComexDriver\TRY2\f2802x_common\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${INSTALLROOT_F2806x_V141}/F2806x_common/lib&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${INSTALLROOT_IQMATH_V160}/lib&quot;"/>
@@ -115,7 +106,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="modify-ecap.c|ecap.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="ecap1_2.c|modify-ecap.c|ecap.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
