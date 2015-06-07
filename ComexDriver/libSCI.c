@@ -6,30 +6,31 @@
  */
 
 #include "DSP28x_Project.h"
-
 void scia_init(void) {
     InitSciaGpio();
-    /*
-     * Initalize the SCI FIFO
-     */
-    SciaRegs.SCIFFTX.all=0xE040;
-    SciaRegs.SCIFFRX.all=0x2044;
+
+    SciaRegs.SCIFFTX.all=0xE040; //tx buffer
+    SciaRegs.SCIFFRX.all=0x2044; //rx buffer
     //SciaRegs.SCIFFRX.all=0x0000;
     SciaRegs.SCIFFCT.all=0x0;
-
-    SciaRegs.SCICCR.all =0x0007;   // 1 stop bit,  No loopback
+    SciaRegs.SCICCR.all=0x0007;   // 1 stop bit,  No loopback
                                    // No parity,8 char bits,
                                    // async mode, idle-line protocol
-    SciaRegs.SCICTL1.all =0x0003;  // enable TX, RX, internal SCICLK,
+    SciaRegs.SCICTL1.all=0x0003;  // enable TX, RX, internal SCICLK,
                                    // Disable RX ERR, SLEEP, TXWAKE
-    SciaRegs.SCICTL2.all =0x0003;
-    SciaRegs.SCICTL2.bit.TXINTENA =1;
-    SciaRegs.SCICTL2.bit.RXBKINTENA =1;
+    SciaRegs.SCICTL2.all=0x0003;
+    SciaRegs.SCICTL2.bit.TXINTENA=1;
+    SciaRegs.SCICTL2.bit.RXBKINTENA=1;
+    //SciaRegs.SCIHBAUD    =0x0000;   // 38400 baud @LSPCLK = 15MHz (60 MHz SYSCLK). //on F28069M, LSPCLK = 20MHz (80MHz SYSCLK)
+    //SciaRegs.SCILBAUD    =0x0030;   // 38400 baud @LSPCLK = 15MHz (60 MHz SYSCLK).
+    //therefore baudrate=(LSPCLK)/((BRR+1)*8)=20MHz/((0x30+1)*8)=20,000,000/(49*8)=51020
+    //this needs to be adjusted
 
-    SciaRegs.SCIHBAUD    =0x0000;  // 38400 baud @LSPCLK = 15MHz (60 MHz SYSCLK).
-    SciaRegs.SCILBAUD    =0x0030;   // 38400 baud @LSPCLK = 15MHz (60 MHz SYSCLK).
-
-    SciaRegs.SCICTL1.all =0x0023;  // Release SCI from Reset
+    //115200=(20,000,000)/((BRR+1)*8) -> (115200)(BRR+1)(8)=(20,000,000) -> BRR+1=(20,000,000)/((115200)(8))=21
+    //for f28069:
+    SciaRegs.SCIHBAUD = 0x0000;  //115200 baud @ LSPCLK = 20MHz for SYSCLK = 80MHz
+    SciaRegs.SCILBAUD = 0x0014;  //115200 baud @ LSPCLK = 20MHz for SYSCLK = 80MHz
+    SciaRegs.SCICTL1.all = 0x0023;  // Release SCI from Reset
 }
 
 /*

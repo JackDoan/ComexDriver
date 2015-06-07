@@ -136,7 +136,7 @@ void POSSPEED_Calc(POSSPEED *p)
         p->oldpos = newp;
 
         // Change motor speed from pu value to rpm value
-        p->SpeedRpm_fr = (int32)(p->BaseRpm*p->Speed_fr);
+        p->SpeedRpm_fr = (int)(p->BaseRpm*p->Speed_fr);
         EQep1Regs.QCLR.bit.UTO=1;                   // Clear interrupt flag
     }
 
@@ -158,9 +158,9 @@ void POSSPEED_Calc(POSSPEED *p)
 
         // Convert p->Speed_pr to RPM
         if (p->DirectionQep==0)                                 // Reverse direction = negative
-            p->SpeedRpm_pr = -(p->BaseRpm * p->Speed_pr);
+            p->SpeedRpm_pr = (int)-(p->BaseRpm * p->Speed_pr);
         else                                                    // Forward direction = positive
-            p->SpeedRpm_pr = (p->BaseRpm * p->Speed_pr);
+            p->SpeedRpm_pr = (int)(p->BaseRpm * p->Speed_pr);
 
         EQep1Regs.QEPSTS.all=0x88;                  // Clear Unit position event flag
                                                     // Clear overflow error flag

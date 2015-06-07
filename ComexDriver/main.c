@@ -37,8 +37,9 @@
 #include "posspeed.h"   // Example specific Include file
 #include "ecap.h"
 #include "libSCI.h"
+#include "ePWM.h"
 
-POSSPEED qep_posspeed=POSSPEED_DEFAULTS;
+POSSPEED qep_data=POSSPEED_DEFAULTS;
 
 void main(void) {
    memcpy(&RamfuncsRunStart, &RamfuncsLoadStart, (size_t)&RamfuncsLoadSize);
@@ -49,13 +50,13 @@ void main(void) {
 // Step 2. Initalize GPIO: 
 // InitGpio();  // Skipped; not needed
    InitEQep1Gpio();
-   InitEPwm1Gpio();
-   InitEPwm2Gpio();
-   InitEPwm3Gpio();
+   //InitEPwm1Gpio();
+   //InitEPwm2Gpio();
+   //InitEPwm3Gpio();
    InitECap1Gpio();
    InitECap2Gpio();
    InitECap3Gpio();
-   scia_init();
+
 
    DINT;
    InitPieCtrl(); // The default state is all PIE interrupts disabled and flags are cleared.
@@ -78,8 +79,9 @@ void main(void) {
    EDIS;
 
 // Step 4. Initialize all the Device Peripherals:
-   //initEpwm();  // This function exists in Example_EPwmSetup.c
    InitECapRegs();
+   scia_init();
+   epwmInit(1,20); //10kHz, 5% duty
    
 // Step 5. Enable interrupts:
    IER |= M_INT4; // Enable CPU INT4 which is connected to ECAP1-4 INT
@@ -93,12 +95,42 @@ void main(void) {
    EINT;   // Enable Global interrupt INTM
    ERTM;   // Enable Global realtime interrupt DBGM
    
-   qep_posspeed.init(&qep_posspeed);
-  	
+   qep_data.init(&qep_data);
+   int printData = 1;
+   readHallStateFlag = 1;
+   EALLOW;
+   //Setup GPIO(0-5) Outputs:
+   GpioCtrlRegs.GPAPUD.all &= 0xFFFFFFC0;
+   GpioDataRegs.GPACLEAR.all |= 0x0000003F;
+   GpioCtrlRegs.GPADIR.all |= 0x0000003F;
+   EDIS;
 	while(1) {
-		qep_posspeed.calc(&qep_posspeed);
+		qep_data.calc(&qep_data);
 		if (readHallStateFlag)
 			updateHallState();
+		if (printData) {
+			char toPrint[] = "Hall State: \n";
+			scia_msg(toPrint);
+			//toPrint[] = "Velocity: " + itoa(qep_data.SpeedRpm_fr) +" \n";
+			//toPrint[] = "Mechanical Angle: " + itoa((qep_data.theta_mech*360)) + " degrees\n"
+			//toPrint[] = "Electrical Angle:"
+		}
+		//update commutation
+		//NOTE: this is not representative of the final product.
+		//NOTE: but, for open-loop control, instead of controlling 6 PWM waves,
+		//NOTE: I've opted to generate 6 independent waveforms and simply enable/disable
+		//NOTE: output for the relevant pins for instantaneous control.
+
+		//NANDing Phase with GPAMUX1 will set all bits which are 1 in Phase to 0 in GPAMUX1
+		//therefore, we need to invert Phase, cast it to an inverted Uint32 to match the size of GPAMUX1,
+		// and finally NAND them together. This is all done in one line.
+		EALLOW;
+		GpioCtrlRegs.GPAMUX1.all &= (0xFFFF0000 | ((Uint32)(~Phase))); //disable first, for safety
+		// next, we need to OR GPAMUX1 with Phase, to set all the bits which actually are 1, to 1.
+		GpioCtrlRegs.GPAMUX1.all |= (Uint32)Phase; //then enable
+		EDIS;
+
+
 
 	}
 

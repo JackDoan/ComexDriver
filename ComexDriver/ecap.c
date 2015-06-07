@@ -20,10 +20,14 @@ void InitECapRegs(void);
 int HallsensorA;
 int HallsensorB;
 int HallsensorC;
+int Phase;
 int Electrical_angle;
 int readHallStateFlag;
-// Initialize counters:
 
+//How to interpret int Phase:
+// 0b|xx|yy|zz
+// xx = phase A | yy = phase B | zz = phase C
+// 10 = high | 00 = off | 01 = low | 11 = illegal
 
 void updateHallState() {
 	readHallStateFlag = 0;
@@ -31,34 +35,50 @@ void updateHallState() {
 	   {
 		   if (HallsensorB == 0)
 		   {
-			   if (HallsensorC == 0)
+			   if (HallsensorC == 0) {
 				   Electrical_angle = 0; //000
-			   else //HallsensorC == 1
+				   Phase = 0;//illegal state!
+				   }
+			   else {//HallsensorC == 1
 				   Electrical_angle = 240; //001
+				   Phase = 0b000110;
+		   			}
 		   }
 		   else //HallsensorB == 1
 		   {
-			   if (HallsensorC == 0)
+			   if (HallsensorC == 0) {
 				   Electrical_angle = 120; //010
-			   else
+				   Phase = 0b011000;
+				   }
+			   else{
 				   Electrical_angle = 180; //011
+				   Phase = 0b010010;
+				   }
 		   }
 	   }
 	   else //HallsensorA == 1
 	   {
 	   	   if (HallsensorB == 0)
 		   {
-			   if (HallsensorC == 0)
+			   if (HallsensorC == 0) {
 				   Electrical_angle = 0; //100
-			   else //HallsensorC == 1
+				   Phase = 0b100001;
+				   }
+			   else {//HallsensorC == 1
 				   Electrical_angle = 300; //101
+				   Phase = 0b100100;
+				   }
 		   }
 		   else //HallsensorB == 1
 		   {
-			   if (HallsensorC == 0)
+			   if (HallsensorC == 0) {
 				   Electrical_angle = 60; //110
-			   else
+				   Phase = 0b001001;
+				   }
+			   else {
 				   Electrical_angle = 0; //111
+				   Phase = 0;//illegal state!
+				   }
 		   }
 
 	   }
@@ -69,6 +89,7 @@ void InitECapRegs()
    HallsensorA = 0;
    HallsensorB = 0;
    HallsensorC = 0;
+   Phase = 0;
    Electrical_angle = 0;
 ///////////////////////////////////////////////
 /////// ECAP 1
@@ -107,8 +128,6 @@ void InitECapRegs()
    ECap2Regs.ECCTL1.bit.CAPLDEN = 0;          // Disable CAP1-CAP4 register loads at capture event time
    ECap2Regs.ECCTL2.bit.TSCTRSTOP = 0;        // Make sure the counter is stopped
 
-   // Configure peripheral registers
-
    ECap2Regs.ECCTL2.bit.CAP_APWM = 0;         // capture mode enable
    ECap2Regs.ECCTL2.bit.CONT_ONESHT = 0;      // continuous mode enable
    ECap2Regs.ECCTL2.bit.STOP_WRAP = 3;        // circular buffer wraps around and starts again at 4 events
@@ -138,8 +157,6 @@ void InitECapRegs()
    ECap3Regs.ECCTL1.bit.CAPLDEN = 0;          // Disable CAP1-CAP4 register loads at capture event time
    ECap3Regs.ECCTL2.bit.TSCTRSTOP = 0;        // Make sure the counter is stopped
 
-   // Configure peripheral registers
-
    ECap3Regs.ECCTL2.bit.CAP_APWM = 0;         // capture mode enable
    ECap3Regs.ECCTL2.bit.CONT_ONESHT = 0;      // continuous mode enable
    ECap3Regs.ECCTL2.bit.STOP_WRAP = 3;        // circular buffer wraps around and starts again at 4 events
@@ -161,25 +178,43 @@ void InitECapRegs()
    ECap3Regs.ECEINT.bit.CEVT2 = 1;            // Capture Event 2 Interrupt Enable----capture the falling edge of the hall sensor signal----
    ECap3Regs.ECEINT.bit.CEVT3 = 1;            // Capture Event 3 Interrupt Enable----capture the rising edge of the hall sensor signal----
    ECap3Regs.ECEINT.bit.CEVT4 = 1;            // Capture Event 4 Interrupt Enable----capture the falling edge of the hall sensor signal----
+
+   //capture initial state
+   EALLOW;
+   GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 0;	         //  GPIO5 as I/O
+   GpioCtrlRegs.GPADIR.bit.GPIO5 = 0;            //  GPIO5 as input
+   GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 0;	         //  GPIO25 as I/O
+   GpioCtrlRegs.GPADIR.bit.GPIO25 = 0;
+   GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 0;	         //  GPIO26 as I/O
+   GpioCtrlRegs.GPADIR.bit.GPIO26 = 0;
+   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO5;  // read the signal from GPIO5
+   HallsensorB = GpioDataRegs.GPADAT.bit.GPIO25;  // read the signal from GPIO25
+   HallsensorC = GpioDataRegs.GPADAT.bit.GPIO26;  // read th signal from GPIO26
+   GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 3;
+   GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 1;
+   GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 1;
+   EDIS;
 }
 
 
 __interrupt void ecap1_isr(void)
 {
    EALLOW;
-   GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 0;	         //  GPIO5 as I/O
-   GpioCtrlRegs.GPADIR.bit.GPIO5 = 0;            //  GPIO5 as input
-   EDIS;
-   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO5;  // read th signal from GPIO5
+   GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 0;	         //  GPIO5 as I/O
+   GpioCtrlRegs.GPADIR.bit.GPIO24 = 0;            //  GPIO5 as input
 
+   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO24;  // read th signal from GPIO5
+   //HallState |= (HallsensorA << 2)
+   //or with: 0b|0000|0000|0001|1111 = 0x001F clears all relevant interrupt conditions
+   ECap1Regs.ECCLR.all |= 0x001F;
+   /*
    ECap1Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
    ECap1Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
    ECap1Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
    ECap1Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
    ECap1Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
-
-   EALLOW;
-   GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 3; // Back to capture mode   GPIO5 as ecap
+   */
+   GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 3; // Back to capture mode   GPIO5 as ecap
    EDIS;
    // Acknowledge this interrupt to receive more interrupts from group 4
    readHallStateFlag = 1;
@@ -192,16 +227,15 @@ __interrupt void ecap2_isr(void)
    EALLOW;
    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 0;	         //  GPIO25 as I/O
    GpioCtrlRegs.GPADIR.bit.GPIO25 = 0;          //   GPIO25 as input
-   EDIS;
-   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO25;  // read th signal from GPIO25
+   HallsensorB = GpioDataRegs.GPADAT.bit.GPIO25;  // read the signal from GPIO25
+   //or with: 0b|0000|0000|0001|1111 = 0x001F clears all relevant interrupt conditions
+   ECap2Regs.ECCLR.all |= 0x001F;
+   //ECap2Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
+   //ECap2Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
+   //ECap2Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
+   //ECap2Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
+   //ECap2Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
 
-   ECap2Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
-   ECap2Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
-   ECap2Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
-   ECap2Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
-   ECap2Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
-
-   EALLOW;
    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 1; // Back to capture mode   GPIO25 as ecap
    EDIS;
    // Acknowledge this interrupt to receive more interrupts from group 4
@@ -215,16 +249,16 @@ __interrupt void ecap3_isr(void)
    EALLOW;
    GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 0;	         //  GPIO26 as I/O
    GpioCtrlRegs.GPADIR.bit.GPIO26 = 0;           //  GPIO26 as input
-   EDIS;
-   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO26;  // read th signal from GPIO26
-
+   HallsensorC = GpioDataRegs.GPADAT.bit.GPIO26;  // read the signal from GPIO26
+   //or with: 0b|0000|0000|0001|1111 = 0x001F clears all relevant interrupt conditions
+   ECap3Regs.ECCLR.all |= 0x001F;
+   /*
    ECap3Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
    ECap3Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
    ECap3Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
    ECap3Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
    ECap3Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
-
-   EALLOW;
+   */
    GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 1; // Back to capture mode   GPIO26 as ecap
    EDIS;
    // Acknowledge this interrupt to receive more interrupts from group 4

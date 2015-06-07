@@ -20,11 +20,11 @@ typedef struct {float theta_elec;       // Output: Motor Electrical angle
                 Uint32 SpeedScaler;     // Parameter :  Scalar converting 1/N cycles to a speed ///CALCULATE THIS
                 float Speed_pr;         // Output :  speed in per-unit
                 Uint32 BaseRpm;         // Parameter : maximum RPM
-                int32 SpeedRpm_pr;      // Output : speed in r.p.m. (Q0) - independently with global Q
+                int SpeedRpm_pr;      // Output : speed in r.p.m. (Q0) - independently with global Q
 
                 float  oldpos;          // Input: Electrical angle (pu)
                 float Speed_fr;         // Output :  speed in per-unit
-                int32 SpeedRpm_fr;      // Output : Speed in rpm
+                int SpeedRpm_fr;      // Output : Speed in rpm
                 void (*init)();         // Pointer to the init funcion
                 void (*calc)();         // Pointer to the calc funtion
                 }  POSSPEED;
