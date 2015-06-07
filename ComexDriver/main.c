@@ -130,8 +130,6 @@ void main(void) {
 		GpioCtrlRegs.GPAMUX1.all |= (Uint32)Phase; //then enable
 		EDIS;
 
-
-
 	}
 
 } 

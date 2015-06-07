@@ -5,9 +5,6 @@ We're going to need some sort of differential line reciever to decode the encode
 
 eQEP Docs: http://www.ti.com/lit/ug/spru790d/spru790d.pdf
 
-Notice how the eQEP example is just an ISR. This makes it trivial to have it almost seamlessly update 
-a value in memory, and the rest of the program can continue, blissfully unaware of what's happening.
-
 "Phase Error Flag— In normal operating conditions, quadrature inputs QEPA and QEPB will be 90
 degrees out of phase. The phase error flag (PHE) is set in the QFLG register when edge transition
 is detected simultaneously on the QEPA and QEPB signals to optionally generate interrupts. State
