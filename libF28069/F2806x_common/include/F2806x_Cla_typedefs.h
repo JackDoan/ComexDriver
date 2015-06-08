@@ -32,6 +32,7 @@ typedef unsigned short  Uint16;
 typedef unsigned long   Uint32;
 typedef float           float32;
 typedef long double     float64;
+typedef unsigned long long Uint64;
 #endif
 
 #ifndef _TI_STD_TYPES
@@ -81,7 +82,7 @@ extern __cregister volatile unsigned int MSTF;
 #ifdef __TMS320C28XX_CLA0__
 typedef struct { Uint32 low32; Uint32 high32; } Uint64;
 #else
-typedef unsigned long long Uint64;
+
 #endif
 
 
