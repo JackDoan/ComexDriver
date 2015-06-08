@@ -21,15 +21,15 @@ void scia_init(void) {
     SciaRegs.SCICTL2.all=0x0003;
     SciaRegs.SCICTL2.bit.TXINTENA=1;
     SciaRegs.SCICTL2.bit.RXBKINTENA=1;
-    //SciaRegs.SCIHBAUD    =0x0000;   // 38400 baud @LSPCLK = 15MHz (60 MHz SYSCLK). //on F28069M, LSPCLK = 20MHz (80MHz SYSCLK)
+    //SciaRegs.SCIHBAUD    =0x0000;   // 38400 baud @LSPCLK = 15MHz (60 MHz SYSCLK). //on F28069M, LSPCLK = 22.5MHz (90MHz SYSCLK)
     //SciaRegs.SCILBAUD    =0x0030;   // 38400 baud @LSPCLK = 15MHz (60 MHz SYSCLK).
     //therefore baudrate=(LSPCLK)/((BRR+1)*8)=20MHz/((0x30+1)*8)=20,000,000/(49*8)=51020
     //this needs to be adjusted
 
-    //115200=(20,000,000)/((BRR+1)*8) -> (115200)(BRR+1)(8)=(20,000,000) -> BRR+1=(20,000,000)/((115200)(8))=21
+    //115200=(22,500,000)/((BRR+1)*8) -> (115200)(BRR+1)(8)=(22,500,000) -> BRR+1=(22,500,000)/((115200)(8))=24 -> BRR = 23
     //for f28069:
-    SciaRegs.SCIHBAUD = 0x0000;  //115200 baud @ LSPCLK = 20MHz for SYSCLK = 80MHz
-    SciaRegs.SCILBAUD = 0x0014;  //115200 baud @ LSPCLK = 20MHz for SYSCLK = 80MHz
+    SciaRegs.SCIHBAUD = 0x0000;  //115200 baud @ LSPCLK = 22.5MHz for SYSCLK = 90MHz
+    SciaRegs.SCILBAUD = 0x0017;  //115200 baud @ LSPCLK = 22.5MHz for SYSCLK = 90MHz
     SciaRegs.SCICTL1.all = 0x0023;  // Release SCI from Reset
 }
 

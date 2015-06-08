@@ -9,10 +9,10 @@
 
 void epwmInit(int freq, int duty) {
 	//InitGpio();
-	freq = freq * 4000;//freq = 1 = 10 kHz
+	freq = freq * 4500;//freq = 1 = 10 kHz
 	// EPWM Module 1 config
-  	//TBCLK prescaler = /1 so TBCLK = 80,000,000
-	EPwm1Regs.TBPRD = freq; // Period = 2(freq)/(TBCLK) = freq/40,000
+  	//TBCLK prescaler = /1 so TBCLK = 90,000,000
+	EPwm1Regs.TBPRD = freq; // Period = 2(freq)/(TBCLK) = freq/45,000
 	EPwm1Regs.TBPHS.half.TBPHS = 0; // Set Phase register to zero
 	EPwm1Regs.TBCTL.bit.CTRMODE = TB_COUNT_UPDOWN; // Symmetrical mode
 	EPwm1Regs.TBCTL.bit.PHSEN = TB_DISABLE; // Master module

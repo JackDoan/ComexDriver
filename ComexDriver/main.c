@@ -27,6 +27,7 @@
 //!
 //!  more info: http://www.ti.com/lit/an/spraah1/spraah1.pdf
 //!				http://www.ti.com/lit/ug/spru790d/spru790d.pdf
+//!  ePWM: http://www.ti.com/lit/ug/spru791f/spru791f.pdf
 //!  pins http://www.ti.com/lit/ug/sprui11/sprui11.pdf
 
 #include <stdint.h>
@@ -38,6 +39,7 @@
 #include "ecap.h"
 #include "libSCI.h"
 #include "ePWM.h"
+#include "adc.h"
 
 POSSPEED qep_data=POSSPEED_DEFAULTS;
 
@@ -76,20 +78,27 @@ void main(void) {
    PieVectTable.ECAP1_INT = &ecap1_isr;  // Group 4 PIE Peripheral Vectors
    PieVectTable.ECAP2_INT = &ecap2_isr;	 // ''
    PieVectTable.ECAP3_INT = &ecap3_isr;  // ''
+   PieVectTable.ADCINT1 = &adc_isr; //
    EDIS;
 
 // Step 4. Initialize all the Device Peripherals:
    InitECapRegs();
    scia_init();
    epwmInit(1,20); //10kHz, 5% duty
+   InitAdc();
+   AdcOffsetSelfCal();
    
 // Step 5. Enable interrupts:
+   IER |= M_INT1; // Enable CPU Interrupt 1 (connected to ADC)
    IER |= M_INT4; // Enable CPU INT4 which is connected to ECAP1-4 INT
    IER |= M_INT3; // Enable CPU INT1 which is connected to CPU-Timer 0:
 
+   PieCtrlRegs.PIEIER1.bit.INTx1 = 1;	   // INT1.1 for ADC
    PieCtrlRegs.PIEIER4.bit.INTx1 = 1;      // INT4.1 for ecap1
    PieCtrlRegs.PIEIER4.bit.INTx2 = 1;      // INT4.2 for ecap2
    PieCtrlRegs.PIEIER4.bit.INTx3 = 1;      // INT4.3 for ecap3
+
+
 
 // Enable global Interrupts and higher priority real-time debug events:
    EINT;   // Enable Global interrupt INTM
@@ -127,6 +136,7 @@ void main(void) {
 		EALLOW;
 		GpioCtrlRegs.GPAMUX1.all &= (0xFFFF0000 | ((Uint32)(~Phase))); //disable first, for safety
 		// next, we need to OR GPAMUX1 with Phase, to set all the bits which actually are 1, to 1.
+		//TODO: examine whether or not we need more dead time
 		GpioCtrlRegs.GPAMUX1.all |= (Uint32)Phase; //then enable
 		EDIS;
 
