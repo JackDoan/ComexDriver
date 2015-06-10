@@ -84,7 +84,11 @@ void main(void) {
 // Step 4. Initialize all the Device Peripherals:
    InitECapRegs();
    scia_init();
+<<<<<<< HEAD
    epwmInit(1,20); //10kHz, 5% duty
+=======
+   epwmInit(1,20, 0); //10kHz, 5% duty, no chop
+>>>>>>> 85d9b38348f9d4052276f6f7136d82cb13c301ae
    InitAdc();
    AdcOffsetSelfCal();
    
@@ -107,17 +111,23 @@ void main(void) {
    qep_data.init(&qep_data);
    int printData = 1;
    readHallStateFlag = 1;
+<<<<<<< HEAD
    EALLOW;
    //Setup GPIO(0-5) Outputs:
    GpioCtrlRegs.GPAPUD.all &= 0xFFFFFFC0;
    GpioDataRegs.GPACLEAR.all |= 0x0000003F;
    GpioCtrlRegs.GPADIR.all |= 0x0000003F;
    EDIS;
+=======
+   char writeBuffer[40] = {0};
+
+>>>>>>> 85d9b38348f9d4052276f6f7136d82cb13c301ae
 	while(1) {
 		qep_data.calc(&qep_data);
 		if (readHallStateFlag)
 			updateHallState();
 		if (printData) {
+<<<<<<< HEAD
 			char toPrint[] = "Hall State: \n";
 			scia_msg(toPrint);
 			//toPrint[] = "Velocity: " + itoa(qep_data.SpeedRpm_fr) +" \n";
@@ -140,6 +150,17 @@ void main(void) {
 		GpioCtrlRegs.GPAMUX1.all |= (Uint32)Phase; //then enable
 		EDIS;
 
+=======
+			writeBuffer[] = "Hall State: \n";
+			scia_msg(writeBuffer);
+			sprintf(writeBuffer, "Velocity: %d rpm\n", qep_data.SpeedRpm_fr);
+			scia_msg(writeBuffer);
+			sprintf(writeBuffer, "Mechanical Angle: %d degrees\n", qep_data.theta_mech*360);
+			scia_msg(writeBuffer);
+			sprintf(writeBuffer, "Electrical Angle: %d\n", qep_data.theta_elec);
+			scia_msg(writeBuffer);
+		}
+>>>>>>> 85d9b38348f9d4052276f6f7136d82cb13c301ae
 	}
 
 } 

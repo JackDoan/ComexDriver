@@ -8,7 +8,7 @@
 #ifndef EPWM_H_
 #define EPWM_H_
 
-void epwmInit(int freq, int duty);
+void epwmInit(int freq, int duty, int chop);
 void doPwmMenu(void);
 
 #endif /* EPWM_H_ */
