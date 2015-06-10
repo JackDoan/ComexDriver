@@ -82,6 +82,21 @@ void updateHallState() {
 		   }
 
 	   }
+	//update commutation
+	//NOTE: this is not representative of the final product.
+	//NOTE: but, for open-loop control, instead of controlling 6 PWM waves,
+	//NOTE: I've opted to generate 6 independent waveforms and simply enable/disable
+	//NOTE: output for the relevant pins for instantaneous control.
+	
+	//NANDing Phase with GPAMUX1 will set all bits which are 1 in Phase to 0 in GPAMUX1
+	//therefore, we need to invert Phase, cast it to an inverted Uint32 to match the size of GPAMUX1,
+	// and finally NAND them together. This is all done in one line.
+	EALLOW;
+	GpioCtrlRegs.GPAMUX1.all &= (0xFFFF0000 | ((Uint32)(~Phase))); //disable first, for safety
+	// next, we need to OR GPAMUX1 with Phase, to set all the bits which actually are 1, to 1.
+	//TODO: examine whether or not we need more dead time
+	GpioCtrlRegs.GPAMUX1.all |= (Uint32)Phase; //then enable
+	EDIS;
 }
 
 void InitECapRegs()
@@ -91,6 +106,17 @@ void InitECapRegs()
    HallsensorC = 0;
    Phase = 0;
    Electrical_angle = 0;
+///////////////////////////////////////////////
+/////// GPIO for commutation
+///////////////////////////////////////////////
+   EALLOW;
+   //Setup GPIO(0-5) Outputs:
+   GpioCtrlRegs.GPAPUD.all &= 0xFFFFFFC0;
+   GpioDataRegs.GPACLEAR.all |= 0x0000003F;
+   GpioCtrlRegs.GPADIR.all |= 0x0000003F;
+   EDIS;   
+   
+   
 ///////////////////////////////////////////////
 /////// ECAP 1
 ///////////////////////////////////////////////
@@ -181,13 +207,13 @@ void InitECapRegs()
 
    //capture initial state
    EALLOW;
-   GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 0;	         //  GPIO5 as I/O
-   GpioCtrlRegs.GPADIR.bit.GPIO5 = 0;            //  GPIO5 as input
+   GpioCtrlRegs.GPAMUX1.bit.GPIO24 = 0;	         //  GPIO24 as I/O
+   GpioCtrlRegs.GPADIR.bit.GPIO24 = 0;            //  GPIO24 as input
    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 0;	         //  GPIO25 as I/O
    GpioCtrlRegs.GPADIR.bit.GPIO25 = 0;
    GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 0;	         //  GPIO26 as I/O
    GpioCtrlRegs.GPADIR.bit.GPIO26 = 0;
-   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO5;  // read the signal from GPIO5
+   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO24;  // read the signal from GPIO24
    HallsensorB = GpioDataRegs.GPADAT.bit.GPIO25;  // read the signal from GPIO25
    HallsensorC = GpioDataRegs.GPADAT.bit.GPIO26;  // read th signal from GPIO26
    GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 3;
@@ -204,7 +230,6 @@ __interrupt void ecap1_isr(void)
    GpioCtrlRegs.GPADIR.bit.GPIO24 = 0;            //  GPIO5 as input
 
    HallsensorA = GpioDataRegs.GPADAT.bit.GPIO24;  // read th signal from GPIO5
-   //HallState |= (HallsensorA << 2)
    //or with: 0b|0000|0000|0001|1111 = 0x001F clears all relevant interrupt conditions
    ECap1Regs.ECCLR.all |= 0x001F;
    /*
