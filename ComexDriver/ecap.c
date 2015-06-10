@@ -207,7 +207,7 @@ void InitECapRegs()
 
    //capture initial state
    EALLOW;
-   GpioCtrlRegs.GPAMUX1.bit.GPIO24 = 0;	         //  GPIO24 as I/O
+   GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 0;	         //  GPIO24 as I/O
    GpioCtrlRegs.GPADIR.bit.GPIO24 = 0;            //  GPIO24 as input
    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 0;	         //  GPIO25 as I/O
    GpioCtrlRegs.GPADIR.bit.GPIO25 = 0;
@@ -216,7 +216,7 @@ void InitECapRegs()
    HallsensorA = GpioDataRegs.GPADAT.bit.GPIO24;  // read the signal from GPIO24
    HallsensorB = GpioDataRegs.GPADAT.bit.GPIO25;  // read the signal from GPIO25
    HallsensorC = GpioDataRegs.GPADAT.bit.GPIO26;  // read th signal from GPIO26
-   GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 3;
+   GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 1;
    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 1;
    GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 1;
    EDIS;
@@ -226,10 +226,10 @@ void InitECapRegs()
 __interrupt void ecap1_isr(void)
 {
    EALLOW;
-   GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 0;	         //  GPIO5 as I/O
-   GpioCtrlRegs.GPADIR.bit.GPIO24 = 0;            //  GPIO5 as input
+   GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 0;	         //  GPIO24 as I/O
+   GpioCtrlRegs.GPADIR.bit.GPIO24 = 0;            //  GPIO24 as input
 
-   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO24;  // read th signal from GPIO5
+   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO24;  // read th signal from GPIO24
    //or with: 0b|0000|0000|0001|1111 = 0x001F clears all relevant interrupt conditions
    ECap1Regs.ECCLR.all |= 0x001F;
    /*
@@ -239,7 +239,7 @@ __interrupt void ecap1_isr(void)
    ECap1Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
    ECap1Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
    */
-   GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 3; // Back to capture mode   GPIO5 as ecap
+   GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 1; // Back to capture mode   GPIO24 as ecap
    EDIS;
    // Acknowledge this interrupt to receive more interrupts from group 4
    readHallStateFlag = 1;

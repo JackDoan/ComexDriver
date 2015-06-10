@@ -84,11 +84,7 @@ void main(void) {
 // Step 4. Initialize all the Device Peripherals:
    InitECapRegs();
    scia_init();
-<<<<<<< HEAD
-   epwmInit(1,20); //10kHz, 5% duty
-=======
    epwmInit(1,20, 0); //10kHz, 5% duty, no chop
->>>>>>> 85d9b38348f9d4052276f6f7136d82cb13c301ae
    InitAdc();
    AdcOffsetSelfCal();
    
@@ -111,56 +107,22 @@ void main(void) {
    qep_data.init(&qep_data);
    int printData = 1;
    readHallStateFlag = 1;
-<<<<<<< HEAD
-   EALLOW;
-   //Setup GPIO(0-5) Outputs:
-   GpioCtrlRegs.GPAPUD.all &= 0xFFFFFFC0;
-   GpioDataRegs.GPACLEAR.all |= 0x0000003F;
-   GpioCtrlRegs.GPADIR.all |= 0x0000003F;
-   EDIS;
-=======
    char writeBuffer[40] = {0};
 
->>>>>>> 85d9b38348f9d4052276f6f7136d82cb13c301ae
 	while(1) {
 		qep_data.calc(&qep_data);
 		if (readHallStateFlag)
 			updateHallState();
 		if (printData) {
-<<<<<<< HEAD
-			char toPrint[] = "Hall State: \n";
-			scia_msg(toPrint);
-			//toPrint[] = "Velocity: " + itoa(qep_data.SpeedRpm_fr) +" \n";
-			//toPrint[] = "Mechanical Angle: " + itoa((qep_data.theta_mech*360)) + " degrees\n"
-			//toPrint[] = "Electrical Angle:"
-		}
-		//update commutation
-		//NOTE: this is not representative of the final product.
-		//NOTE: but, for open-loop control, instead of controlling 6 PWM waves,
-		//NOTE: I've opted to generate 6 independent waveforms and simply enable/disable
-		//NOTE: output for the relevant pins for instantaneous control.
-
-		//NANDing Phase with GPAMUX1 will set all bits which are 1 in Phase to 0 in GPAMUX1
-		//therefore, we need to invert Phase, cast it to an inverted Uint32 to match the size of GPAMUX1,
-		// and finally NAND them together. This is all done in one line.
-		EALLOW;
-		GpioCtrlRegs.GPAMUX1.all &= (0xFFFF0000 | ((Uint32)(~Phase))); //disable first, for safety
-		// next, we need to OR GPAMUX1 with Phase, to set all the bits which actually are 1, to 1.
-		//TODO: examine whether or not we need more dead time
-		GpioCtrlRegs.GPAMUX1.all |= (Uint32)Phase; //then enable
-		EDIS;
-
-=======
-			writeBuffer[] = "Hall State: \n";
+			sprintf(writeBuffer, "Hall State: %d\n", Phase);
 			scia_msg(writeBuffer);
 			sprintf(writeBuffer, "Velocity: %d rpm\n", qep_data.SpeedRpm_fr);
 			scia_msg(writeBuffer);
 			sprintf(writeBuffer, "Mechanical Angle: %d degrees\n", qep_data.theta_mech*360);
 			scia_msg(writeBuffer);
-			sprintf(writeBuffer, "Electrical Angle: %d\n", qep_data.theta_elec);
+			sprintf(writeBuffer, "Electrical Angle: %d\n\r", qep_data.theta_elec);
 			scia_msg(writeBuffer);
 		}
->>>>>>> 85d9b38348f9d4052276f6f7136d82cb13c301ae
 	}
 
 } 
