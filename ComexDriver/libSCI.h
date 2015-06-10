@@ -11,6 +11,7 @@
 #include "DSP28x_Project.h"
 Uint16 scia_read(void);
 
+__interrupt void scia_isr();
 void scia_init(void);
 void scia_xmit(int a);
 void scia_msg(char *msg);

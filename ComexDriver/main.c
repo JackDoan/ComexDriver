@@ -79,6 +79,7 @@ void main(void) {
    PieVectTable.ECAP2_INT = &ecap2_isr;	 // ''
    PieVectTable.ECAP3_INT = &ecap3_isr;  // ''
    PieVectTable.ADCINT1 = &adc_isr; //
+   PieVectTable.SCIRXINTA = &scia_isr;
    EDIS;
 
 // Step 4. Initialize all the Device Peripherals:
@@ -118,9 +119,9 @@ void main(void) {
 			scia_msg(writeBuffer);
 			sprintf(writeBuffer, "Velocity: %d rpm\n", qep_data.SpeedRpm_fr);
 			scia_msg(writeBuffer);
-			sprintf(writeBuffer, "Mechanical Angle: %d degrees\n", qep_data.theta_mech*360);
+			sprintf(writeBuffer, "Mechanical Angle: %d degrees\n", (int)qep_data.theta_mech*360);
 			scia_msg(writeBuffer);
-			sprintf(writeBuffer, "Electrical Angle: %d\n\r", qep_data.theta_elec);
+			sprintf(writeBuffer, "Electrical Angle: %d\n\r", (int)qep_data.theta_elec);
 			scia_msg(writeBuffer);
 		}
 	}

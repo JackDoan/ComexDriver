@@ -102,3 +102,11 @@ void printMenu(char** menu, int size) {
 	}
 
 }
+
+__interrupt void scia_isr() {
+
+
+
+
+
+}

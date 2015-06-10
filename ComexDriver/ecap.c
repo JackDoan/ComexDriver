@@ -41,18 +41,21 @@ void updateHallState() {
 				   }
 			   else {//HallsensorC == 1
 				   Electrical_angle = 240; //001
-				   Phase = 0b000110;
+				   //Phase = 0b000110;
+				   Phase = 0b011000;
 		   			}
 		   }
 		   else //HallsensorB == 1
 		   {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 120; //010
-				   Phase = 0b011000;
+				   //Phase = 0b011000;
+				   Phase = 0b100001;
 				   }
 			   else{
 				   Electrical_angle = 180; //011
-				   Phase = 0b010010;
+				   //Phase = 0b010010;
+				   Phase = 0b001001;
 				   }
 		   }
 	   }
@@ -62,18 +65,21 @@ void updateHallState() {
 		   {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 0; //100
-				   Phase = 0b100001;
+				   //Phase = 0b100001;
+				   Phase = 0b000110;
 				   }
 			   else {//HallsensorC == 1
 				   Electrical_angle = 300; //101
-				   Phase = 0b100100;
+				   //Phase = 0b100100;
+				   Phase = 0b010010;
 				   }
 		   }
 		   else //HallsensorB == 1
 		   {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 60; //110
-				   Phase = 0b001001;
+				   //Phase = 0b001001;
+				   Phase = 0b100100;
 				   }
 			   else {
 				   Electrical_angle = 0; //111
