@@ -1,21 +1,10 @@
 #ifndef _SPI_H_
 #define _SPI_H_
 
-//\brief Defines the location of the SPICHAR3-0 bits in the SPICCR register
-//!
-#define SPI_SPICCR_CHAR_LENGTH_BITS        (15 << 0)
-
 //! \brief Defines the location of the SPILBK bits in the SPICCR register
 //!
 #define SPI_SPICCR_SPILBK_BITS             ( 1 << 4)
 
-//! \brief Defines the location of the CLOCK POLARITY bits in the SPICCR register
-//!
-#define SPI_SPICCR_CLKPOL_BITS             ( 1 << 6)
-
-//! \brief Defines the location of the SPI SW Reset bits in the SPICCR register
-//!
-#define SPI_SPICCR_RESET_BITS              ( 1 << 7)
 
 //! \brief Defines the location of the SPI INT Flag in the SPIST register
 //!
@@ -99,13 +88,6 @@
 //!
 #define SPI_SPIFFTX_FIFO_ST_BITS      (31 << 8)
 
-//! \brief Defines the location of the TXFIFO Reset bits in the SPIFFTX register
-//!
-#define SPI_SPIFFTX_FIFO_RESET_BITS   ( 1 << 13)
-
-//! \brief Defines the location of the SPIFFENA bits in the SPIFFTX register
-//!
-#define SPI_SPIFFTX_FIFO_ENA_BITS     ( 1 << 14)
 
 //! \brief Defines the location of the SPIRST bits in the SPIFFTX register
 //!
@@ -160,25 +142,6 @@ typedef enum
   SPI_ClkPhase_Normal=(0<<3),      //!< Denotes a normal clock scheme
   SPI_ClkPhase_Delayed=(1<<3)      //!< Denotes that the SPICLK signal is delayed by one half-cycle
 } SPI_ClkPhase_e;
-
-
-//! \brief Enumeration to define the serial peripheral interface (SPI) clock polarity for the input and output data
-//!
-typedef enum
-{
-  SPI_ClkPolarity_OutputRisingEdge_InputFallingEdge=(0 << 6),  //!< Denotes that the tx data is output on the rising edge, the rx data is latched on the falling edge
-  SPI_ClkPolarity_OutputFallingEdge_InputRisingEdge=(1 << 6)   //!< Denotes that the tx data is output on the falling edge, the rx data is latched on the rising edge
-} SPI_ClkPolarity_e;
-
-
-
-//! \brief Enumeration to define the serial peripheral interface (SPI) network mode control
-//!
-typedef enum
-{
-  SPI_Mode_Slave=(0<<2),      //!< Denotes slave mode
-  SPI_Mode_Master=(1<<2)      //!< Denotes master mode
-} SPI_Mode_e;
 
 
 //! \brief Enumeration to define the serial peripheral interface (SPI) FIFO level
@@ -655,18 +618,6 @@ static inline void SPI_write8(SPI_Handle spiHandle,const uint16_t data)
 #define DRV8301_CTRL2_OC_TOFF_BITS       (1 << 6)
 
 
-// **************************************************************************
-// the typedefs
-
-//! \brief Enumeration for the R/W modes
-//!
-typedef enum
-{
-  DRV8301_CtrlMode_Read = 1 << 15,   //!< Read Mode
-  DRV8301_CtrlMode_Write = 0 << 15   //!< Write Mode
-} DRV8301_CtrlMode_e;
-
-
 //! \brief Enumeration for the DC calibration modes
 //!
 typedef enum
@@ -737,34 +688,6 @@ typedef enum
 } DRV8301_PeakCurrent_e;
 
 
-//! \brief Enumeration for the PWM modes
-//!
-typedef enum
-{
-  DRV8301_PwmMode_Six_Inputs   = 0 << 3,   //!< six independent inputs
-  DRV8301_PwmMode_Three_Inputs = 1 << 3    //!< three independent nputs
-} DRV8301_PwmMode_e;
-
-
-//! \brief Enumeration for the register names
-//!
-typedef enum
-{
-  DRV8301_RegName_Status_1  = 0 << 11,   //!< Status Register 1
-  DRV8301_RegName_Status_2  = 1 << 11,   //!< Status Register 2
-  DRV8301_RegName_Control_1 = 2 << 11,  //!< Control Register 1
-  DRV8301_RegName_Control_2 = 3 << 11   //!< Control Register 2
-} DRV8301_RegName_e;
-
-
-
-//! \brief Enumeration for the shunt amplifier gains
-//!
-typedef enum
-{
-  DRV8301_Reset_Normal = 0 << 2,   //!< normal
-  DRV8301_Reset_All = 1 << 2       //!< reset all
-} DRV8301_Reset_e;
 
 
 //! \brief Enumeration for the shunt amplifier gains
@@ -907,28 +830,6 @@ typedef struct _DRV8301_Obj_ *DRV8301_Handle;
 typedef  uint16_t    DRV8301_Word_t;
 
 
-// **************************************************************************
-// the globals
-
-
-
-// **************************************************************************
-// the function prototypes
-
-
-//! \brief     Builds the control word
-//! \param[in] ctrlMode  The control mode
-//! \param[in] regName   The register name
-//! \param[in] data      The data
-//! \return    The control word
-static inline DRV8301_Word_t DRV8301_buildCtrlWord(const DRV8301_CtrlMode_e ctrlMode,
-                                                   const DRV8301_RegName_e regName,
-                                                   const uint16_t data)
-{
-  DRV8301_Word_t ctrlWord = ctrlMode | regName | (data & DRV8301_DATA_MASK);
-
-  return(ctrlWord);
-} // end of DRV8301_buildCtrlWord() function
 
 
 //! \brief     Gets the DC calibration mode
