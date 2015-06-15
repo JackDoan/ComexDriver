@@ -2,7 +2,7 @@
 //! and falling edge of the Hall sensor signal A & B & C
 //!
 //! \b External \b Connections \n
-//! - eCAP1 is on GPIO5
+//! - eCAP1 is on GPIO24
 //! - eCAP2 is on GPIO25
 //! - eCAP3 is on GPIO26
 //!
