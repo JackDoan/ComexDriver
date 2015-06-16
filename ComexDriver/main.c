@@ -110,23 +110,23 @@ void main(void) {
    ERTM;   // Enable Global realtime interrupt DBGM
    
    qep_data.init(&qep_data);
-   int printData = 1;
+   int printData = 0;
    readHallStateFlag = 1;
    char writeBuffer[40] = {0};
 
 	while(1) {
-		qep_data.calc(&qep_data);
+		//qep_data.calc(&qep_data);
 		if (readHallStateFlag)
 			updateHallState();
 		if (printData) {
 			sprintf(writeBuffer, "Hall State: %d\n", Phase);
-			scia_msg(writeBuffer);
+			//scia_msg(writeBuffer);
 			sprintf(writeBuffer, "Velocity: %d rpm\n", qep_data.SpeedRpm_fr);
-			scia_msg(writeBuffer);
+			//scia_msg(writeBuffer);
 			sprintf(writeBuffer, "Mechanical Angle: %d degrees\n", (int)qep_data.theta_mech*360);
-			scia_msg(writeBuffer);
+			//scia_msg(writeBuffer);
 			sprintf(writeBuffer, "Electrical Angle: %d\n\r", (int)qep_data.theta_elec);
-			scia_msg(writeBuffer);
+			//scia_msg(writeBuffer);
 		}
 	}
 
