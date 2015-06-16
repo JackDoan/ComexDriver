@@ -239,244 +239,178 @@ typedef struct _SPI_Obj_ *SPI_Handle;
 
 //! \brief     Clears the Rx FIFO overflow flag
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_clearRxFifoOvf(SPI_Handle spiHandle);
+extern void SPI_clearRxFifoOvf();
 
 
 //! \brief     Clears the Rx FIFO interrupt flag
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_clearRxFifoInt(SPI_Handle spiHandle);
+extern void SPI_clearRxFifoInt();
 
 
 //! \brief     Clears the Tx FIFO interrupt flag
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_clearTxFifoInt(SPI_Handle spiHandle);
+extern void SPI_clearTxFifoInt();
 
 
 //! \brief     Disables the serial peripheral interface (SPI) interrupt
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_disableInt(SPI_Handle spiHandle);
+extern void SPI_disableInt();
 
 
 //! \brief     Disables the serial peripheral interface (SPI) loop back mode
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_disableLoopBack(SPI_Handle spiHandle);
+extern void SPI_disableLoopBack();
 
 
 //! \brief     Disables the serial peripheral interface (SPI) over-run interrupt
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_disableOverRunInt(SPI_Handle spiHandle);
+extern void SPI_disableOverRunInt();
 
 
 //! \brief     Disables the serial peripheral interface (SPI) receive FIFO interrupt
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_disableRxFifoInt(SPI_Handle spiHandle);
+extern void SPI_disableRxFifoInt();
 
 
 //! \brief     Disables the serial peripheral interface (SPI) master/slave transmit mode
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_disableTx(SPI_Handle spiHandle);
+extern void SPI_disableTx();
 
 
 //! \brief     Disables the serial peripheral interface (SPI) transmit FIFO enhancements
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_disableTxFifoEnh(SPI_Handle spiHandle);
+extern void SPI_disableTxFifoEnh();
 
 
 //! \brief     Disables the serial peripheral interface (SPI) transmit FIFO interrupt
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_disableTxFifoInt(SPI_Handle spiHandle);
+extern void SPI_disableTxFifoInt();
 
 
 //! \brief     Enables the serial peripheral interface (SPI)
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enable(SPI_Handle spiHandle);
+extern void SPI_enable();
 
 
 //! \brief     Enables the serial peripheral interface (SPI) transmit and receive channels
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enableChannels(SPI_Handle spiHandle);
+extern void SPI_enableChannels();
 
 
 //! \brief     Enables the serial peripheral interface (SPI) interrupt
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enableInt(SPI_Handle spiHandle);
+extern void SPI_enableInt();
 
 
 //! \brief     Enables the serial peripheral interface (SPI) loop back mode
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enableLoopBack(SPI_Handle spiHandle);
+extern void SPI_enableLoopBack();
 
 
 //! \brief     Enables the serial peripheral interface (SPI) over-run interrupt
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enableOverRunInt(SPI_Handle spiHandle);
+extern void SPI_enableOverRunInt();
 
 
 //! \brief     Enables the serial peripheral interface (SPI) receive FIFO
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enableRxFifo(SPI_Handle spiHandle);
+extern void SPI_enableRxFifo();
 
 
 //! \brief     Enables the serial peripheral interface (SPI) receive FIFO interrupt
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enableRxFifoInt(SPI_Handle spiHandle);
+extern void SPI_enableRxFifoInt();
 
 
 //! \brief     Enables the serial peripheral interface (SPI) masater/slave transmit mode
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enableTx(SPI_Handle spiHandle);
+extern void SPI_enableTx();
 
 
 //! \brief     Re-enables the serial peripheral interface (SPI) transmit FIFO
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enableTxFifo(SPI_Handle spiHandle);
+extern void SPI_enableTxFifo();
 
 
 //! \brief     Enables the serial peripheral interface (SPI) transmit FIFO enhancements
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enableTxFifoEnh(SPI_Handle spiHandle);
+extern void SPI_enableTxFifoEnh();
 
 
 //! \brief     Enables the serial peripheral interface (SPI) transmit FIFO interrupt
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_enableTxFifoInt(SPI_Handle spiHandle);
+extern void SPI_enableTxFifoInt();
 
 
 //! \brief     Gets the serial peripheral interface (SPI) receive FIFO status
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
 //! \return    The receive FIFO status
-extern SPI_FifoStatus_e SPI_getRxFifoStatus(SPI_Handle spiHandle);
+extern SPI_FifoStatus_e SPI_getRxFifoStatus();
 
 
 //! \brief     Gets the serial peripheral interface (SPI) transmit FIFO status
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
 //! \return    The transmit FIFO status
-extern SPI_FifoStatus_e SPI_getTxFifoStatus(SPI_Handle spiHandle);
+extern SPI_FifoStatus_e SPI_getTxFifoStatus();
 
 
 //! \brief     Gets the serial peripheral interface (SPI) Interrupt Flag status
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
 //! \return    The Interrupt Flag status
-extern SPI_IntFlagStatus_e SPI_getIntFlagStatus(SPI_Handle spiHandle);
+extern SPI_IntFlagStatus_e SPI_getIntFlagStatus();
 
 
 //! \brief     Gets the serial peripheral interface (SPI) Tx Buffer status
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
 //! \return    The Interrupt Flag status
-extern SPI_TxBufferStatus_e SPI_getTxBufferStatus(SPI_Handle spiHandle);
+extern SPI_TxBufferStatus_e SPI_getTxBufferStatus();
 
-
-//! \brief     Initializes the serial peripheral interface (SPI) object handle
-//! \param[in] pMemory     A pointer to the base address of the SPI registers
-//! \param[in] numBytes    The number of bytes allocated for the SPI object, bytes
-//! \return    The serial peripheral interface (SPI) object handle
-extern SPI_Handle SPI_init(void *pMemory,const size_t numBytes);
 
 //! \brief     Resets the serial peripheral interface (SPI)
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_reset(SPI_Handle spiHandle);
+extern void SPI_reset();
 
 
 //! \brief     Resets the serial peripheral interface (SPI) transmit and receive channels
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_resetChannels(SPI_Handle spiHandle);
-
-
-//! \brief     Resets the serial peripheral interface (SPI) receive FIFO
-//! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_resetRxFifo(SPI_Handle spiHandle);
-
-
-//! \brief     Resets the serial peripheral interface (SPI) transmit FIFO
-//! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-extern void SPI_resetTxFifo(SPI_Handle spiHandle);
-
-
-//! \brief     Sets the serial peripheral interface (SPI) baud rate
-//! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-//! \param[in] baudRate   The baud rate
-extern void SPI_setBaudRate(SPI_Handle spiHandle,const SPI_BaudRate_e baudRate);
-
-
-//! \brief     Sets the serial peripheral interface (SPI) character length
-//! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-//! \param[in] length     The character length
-extern void SPI_setCharLength(SPI_Handle spiHandle,const SPI_CharLength_e length);
-
-
-//! \brief     Sets the serial peripheral interface (SPI) clock phase
-//! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-//! \param[in] clkPhase   The clock phase
-extern void SPI_setClkPhase(SPI_Handle spiHandle,const SPI_ClkPhase_e clkPhase);
-
-
-//! \brief     Sets the serial peripheral interface (SPI) clock polarity
-//! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-//! \param[in] polarity   The clock polarity
-extern void SPI_setClkPolarity(SPI_Handle spiHandle,const SPI_ClkPolarity_e polarity);
-
-
-//! \brief     Sets the serial peripheral interface (SPI) network mode
-//! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-//! \param[in] mode       The network mode
-extern void SPI_setMode(SPI_Handle spiHandle,const SPI_Mode_e mode);
+extern void SPI_resetChannels();
 
 
 //! \brief     Sets the serial peripheral interface (SPI) receive FIFO level for generating an interrupt
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
 //! \param[in] fifoLevel  The FIFO level
-extern void SPI_setRxFifoIntLevel(SPI_Handle spiHandle,const SPI_FifoLevel_e fifoLevel);
+extern void SPI_setRxFifoIntLevel(const SPI_FifoLevel_e fifoLevel);
 
 
 //! \brief     Sets the priority of the SPI port vis-a-vis the EMU
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
 //! \param[in] priority   The priority of the SPI port vis-a-vis the EMU
-extern void SPI_setPriority(SPI_Handle spiHandle,const SPI_Priority_e priority);
+extern void SPI_setPriority(const SPI_Priority_e priority);
 
 
 //! \brief     Controls pin inversion of STE pin
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
 //! \param[in] steinv     Polarity of STE pin
-extern void SPI_setSteInv(SPI_Handle spiHandle,const SPI_SteInv_e steinv);
+extern void SPI_setSteInv(const SPI_SteInv_e steinv);
 
 
 //! \brief     Sets the serial peripheral interface (SPI) emulation suspend bits
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
 //! \param[in] SPI_EmulationSuspend_e The emulation suspend enumeration
-extern void SPI_setSuspend(SPI_Handle spiHandle,const SPI_EmulationSuspend_e emuSuspend);
+extern void SPI_setSuspend(const SPI_EmulationSuspend_e emuSuspend);
 
 
 //! \brief     Sets SPI port operating mode
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
 //! \param[in] triwire    3 or 4 wire mode
-extern void SPI_setTriWire(SPI_Handle spiHandle,const SPI_TriWire_e triwire);
-
-
-//! \brief     Sets the serial peripheral interface (SPI) transmit delay
-//! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-//! \param[in] delay      The delay value
-extern void SPI_setTxDelay(SPI_Handle spiHandle,const uint_least8_t delay);
+extern void SPI_setTriWire(const SPI_TriWire_e triwire);
 
 
 //! \brief     Sets the serial peripheral interface (SPI) transmit FIFO level for generating an interrupt
 //! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
 //! \param[in] fifoLevel  The FIFO level
-extern void SPI_setTxFifoIntLevel(SPI_Handle spiHandle,const SPI_FifoLevel_e fifoLevel);
+extern void SPI_setTxFifoIntLevel(const SPI_FifoLevel_e fifoLevel);
 
-
-//! \brief     Writes a byte of data to the serial peripheral interface (SPI)
-//! \param[in] spiHandle  The serial peripheral interface (SPI) object handle
-//! \param[in] data       The data value
-static inline void SPI_write8(SPI_Handle spiHandle,const uint16_t data)
-{
-    SPI_Obj *spi = (SPI_Obj *)spiHandle;
-
-
-    // set the bits
-    spi->SPITXBUF = (data & 0xFF) << 8;
-
-    return;
-} // end of SPI_write() function
 
 
 //@} // ingroup
@@ -505,11 +439,6 @@ static inline void SPI_write8(SPI_Handle spiHandle,const uint16_t data)
 //! \brief Defines the address mask
 //!
 #define DRV8301_ADDR_MASK               (0x7800)
-
-
-//! \brief Defines the data mask
-//!
-#define DRV8301_DATA_MASK               (0x07FF)
 
 
 //! \brief Defines the R/W mask
@@ -584,13 +513,6 @@ static inline void SPI_write8(SPI_Handle spiHandle,const uint16_t data)
 //!
 #define DRV8301_CTRL1_GATE_RESET_BITS    (1 << 2)
 
-//! \brief Defines the location of the PWM_MODE bits in the Control 1 register
-//!
-#define DRV8301_CTRL1_PWM_MODE_BITS      (1 << 3)
-
-//! \brief Defines the location of the OC_MODE bits in the Control 1 register
-//!
-#define DRV8301_CTRL1_OC_MODE_BITS       (3 << 4)
 
 //! \brief Defines the location of the OC_ADJ bits in the Control 1 register
 //!
@@ -646,17 +568,6 @@ typedef enum
   DRV8301_FaultType_GVDD_UV  = (1 << 9),  //!< DRV8301 Vdd Under Voltage fault
   DRV8301_FaultType_GVDD_OV  = (1 << 10)  //!< DRV8301 Vdd Over Voltage fault
 } DRV8301_FaultType_e;
-
-
-//! \brief Enumeration for the Over Current modes
-//!
-typedef enum
-{
-  DRV8301_OcMode_CurrentLimit  = 0 << 4,   //!< current limit when OC detected
-  DRV8301_OcMode_LatchShutDown = 1 << 4,   //!< latch shut down when OC detected
-  DRV8301_OcMode_ReportOnly    = 2 << 4,   //!< report only when OC detected
-  DRV8301_OcMode_Disabled      = 3 << 4    //!< OC protection disabled
-} DRV8301_OcMode_e;
 
 
 //! \brief Enumeration for the Over Current Off Time modes
@@ -757,34 +668,32 @@ typedef enum
 
 typedef struct _DRV_SPI_8301_Stat1_t_
 {
-  bool                  FAULT;
-  bool                  GVDD_UV;
-  bool                  PVDD_UV;
-  bool                  OTSD;
-  bool                  OTW;
-  bool                  FETHA_OC;
-  bool                  FETLA_OC;
-  bool                  FETHB_OC;
-  bool                  FETLB_OC;
-  bool                  FETHC_OC;
-  bool                  FETLC_OC;
+  int                  FAULT;
+  int                  GVDD_UV;
+  int                  PVDD_UV;
+  int                  OTSD;
+  int                  OTW;
+  int                  FETHA_OC;
+  int                  FETLA_OC;
+  int                  FETHB_OC;
+  int                  FETLB_OC;
+  int                  FETHC_OC;
+  int                  FETLC_OC;
 }DRV_SPI_8301_Stat1_t_;
 
 
 typedef struct _DRV_SPI_8301_Stat2_t_
 {
-  bool                  GVDD_OV;
-  uint16_t              DeviceID;
+  int                  GVDD_OV;
+  unsigned int              DeviceID;
 }DRV_SPI_8301_Stat2_t_;
 
 
 typedef struct _DRV_SPI_8301_CTRL1_t_
 {
   DRV8301_PeakCurrent_e    DRV8301_CURRENT;
-  DRV8301_Reset_e          DRV8301_RESET;
-  DRV8301_PwmMode_e        PWM_MODE;
-  DRV8301_OcMode_e         OC_MODE;
-  DRV8301_VdsLevel_e       OC_ADJ_SET;
+  unsigned int          DRV8301_RESET;
+  unsigned int        PWM_MODE;
 }DRV_SPI_8301_CTRL1_t_;
 
 
@@ -803,8 +712,8 @@ typedef struct _DRV_SPI_8301_Vars_t_
   DRV_SPI_8301_Stat2_t_     Stat_Reg_2;
   DRV_SPI_8301_CTRL1_t_     Ctrl_Reg_1;
   DRV_SPI_8301_CTRL2_t_     Ctrl_Reg_2;
-  bool                  SndCmd;
-  bool                  RcvCmd;
+  int                  SndCmd;
+  int                  RcvCmd;
 }DRV_SPI_8301_Vars_t;
 
 
@@ -812,11 +721,9 @@ typedef struct _DRV_SPI_8301_Vars_t_
 //!
 typedef struct _DRV8301_Obj_
 {
-  SPI_Handle       spiHandle;                  //!< the handle for the serial peripheral interface
-  GPIO_Handle      gpioHandle;                 //!< the gpio handle that is connected to the drv8301 enable pin
-  GPIO_Number_e    gpioNumber;                 //!< the gpio number that is connected to the drv8301 enable pin
-  bool             RxTimeOut;                  //!< the timeout flag for the RX fifo
-  bool             enableTimeOut;              //!< the timeout flag for drv8301 enable
+                 //!< the gpio number that is connected to the drv8301 enable pin
+  int             RxTimeOut;                  //!< the timeout flag for the RX fifo
+  int             enableTimeOut;              //!< the timeout flag for drv8301 enable
 } DRV8301_Obj;
 
 
@@ -827,7 +734,7 @@ typedef struct _DRV8301_Obj_ *DRV8301_Handle;
 
 //! \brief Defines the DRV8301 Word type
 //!
-typedef  uint16_t    DRV8301_Word_t;
+typedef  unsigned int    DRV8301_Word_t;
 
 
 
@@ -836,118 +743,111 @@ typedef  uint16_t    DRV8301_Word_t;
 //! \param[in] handle     The DRV8301 handle
 //! \param[in] ampNumber  The shunt amplifier number
 //! \return    The DC calibration mode
-extern DRV8301_DcCalMode_e DRV8301_getDcCalMode(DRV8301_Handle handle,
-                                                const DRV8301_ShuntAmpNumber_e ampNumber);
+extern unsigned int DRV8301_getDcCalMode(const int ampNumber);
 
 //! \brief     Enables the DRV8301
 //! \param[in] handle     The DRV8301 handle
-extern void DRV8301_enable(DRV8301_Handle handle);
+extern void DRV8301_enable();
 
 
 //! \brief     Gets the fault type
 //! \param[in] handle     The DRV8301 handle
 //! \return    The fault type
-extern DRV8301_FaultType_e DRV8301_getFaultType(DRV8301_Handle handle);
+extern DRV8301_FaultType_e DRV8301_getFaultType();
 
 
 //! \brief     Gets the device ID
 //! \param[in] handle     The DRV8301 handle
 //! \return    The device ID
-extern uint16_t DRV8301_getId(DRV8301_Handle handle);
+extern unsigned int DRV8301_getId();
 
 
 //! \brief     Gets the over current level
 //! \param[in] handle     The DRV8301 handle
 //! \return    The over current level, V
-extern DRV8301_VdsLevel_e DRV8301_getOcLevel(DRV8301_Handle handle);
+extern DRV8301_VdsLevel_e DRV8301_getOcLevel();
 
 
 //! \brief     Gets the over current mode
 //! \param[in] handle     The DRV8301 handle
 //! \return    The over current mode
-extern DRV8301_OcMode_e DRV8301_getOcMode(DRV8301_Handle handle);
+extern unsigned int DRV8301_getOcMode();
 
 
 //! \brief     Gets the over current off time mode
 //! \param[in] handle     The DRV8301 handle
 //! \return    The over current off time mode
-extern DRV8301_OcOffTimeMode_e DRV8301_getOcOffTimeMode(DRV8301_Handle handle);
+extern DRV8301_OcOffTimeMode_e DRV8301_getOcOffTimeMode();
 
 
 //! \brief     Gets the over current, temperature warning mode
 //! \param[in] handle     The DRV8301 handle
 //! \return    The over current, temperature warning mode
-extern DRV8301_OcTwMode_e DRV8301_getOcTwMode(DRV8301_Handle handle);
+extern DRV8301_OcTwMode_e DRV8301_getOcTwMode();
 
 
 //! \brief     Gets the peak current value
 //! \param[in] handle     The DRV8301 handle
 //! \return    The peak current value
-extern DRV8301_PeakCurrent_e DRV8301_getPeakCurrent(DRV8301_Handle handle);
+extern DRV8301_PeakCurrent_e DRV8301_getPeakCurrent();
 
 
 //! \brief     Gets the PWM mode
 //! \param[in] handle     The DRV8301 handle
 //! \return    The PWM mode
-extern DRV8301_PwmMode_e DRV8301_getPwmMode(DRV8301_Handle handle);
+extern unsigned int DRV8301_getPwmMode();
 
 
 //! \brief     Gets the shunt amplifier gain value
 //! \param[in] handle     The DRV8301 handle
 //! \return    The shunt amplifier gain value
-extern DRV8301_ShuntAmpGain_e DRV8301_getShuntAmpGain(DRV8301_Handle handle);
+extern DRV8301_ShuntAmpGain_e DRV8301_getShuntAmpGain();
 
 
 //! \brief     Gets the status register 1 value
 //! \param[in] handle     The DRV8301 handle
 //! \return    The status register1 value
-extern uint16_t DRV8301_getStatusRegister1(DRV8301_Handle handle);
+extern unsigned int DRV8301_getStatusRegister1();
 
 
 //! \brief     Gets the status register 2 value
 //! \param[in] handle     The DRV8301 handle
 //! \return    The status register2 value
-extern uint16_t DRV8301_getStatusRegister2(DRV8301_Handle handle);
+extern unsigned int DRV8301_getStatusRegister2();
 
-
-//! \brief     Initializes the DRV8301 object
-//! \param[in] pMemory   A pointer to the memory for the DRV8301 object
-//! \param[in] numBytes  The number of bytes allocated for the DRV8301 object, bytes
-//! \return    The DRV8301 object handle
-extern DRV8301_Handle DRV8301_init(void *pMemory,const size_t numBytes);
 
 
 //! \brief     Determines if DRV8301 fault has occurred
 //! \param[in] handle     The DRV8301 handle
-//! \return    A boolean value denoting if a fault has occurred (true) or not (false)
-extern bool DRV8301_isFault(DRV8301_Handle handle);
+//! \return    A intean value denoting if a fault has occurred (true) or not (false)
+extern int DRV8301_isFault();
 
 
 //! \brief     Determines if DRV8301 is in reset
 //! \param[in] handle     The DRV8301 handle
-//! \return    A boolean value denoting if the DRV8301 is in reset (true) or not (false)
-extern bool DRV8301_isReset(DRV8301_Handle handle);
+//! \return    A intean value denoting if the DRV8301 is in reset (true) or not (false)
+extern int DRV8301_isReset();
 
 
 //! \brief     Reads data from the DRV8301 register
 //! \param[in] handle   The DRV8301 handle
 //! \param[in] regName  The register name
 //! \return    The data value
-extern uint16_t DRV8301_readSpi(DRV8301_Handle handle,const DRV8301_RegName_e regName);
+extern unsigned int DRV8301_readSpi(const int regName);
 
 
 //! \brief     Resets the DRV8301
 //! \param[in] handle   The DRV8301 handle
-extern void DRV8301_reset(DRV8301_Handle handle);
+extern void DRV8301_reset();
 
 
 //! \brief     Resets the enable timeout flag
 //! \param[in] handle   The DRV8301 handle
-static inline void DRV8301_resetEnableTimeout(DRV8301_Handle handle)
+static inline void DRV8301_resetEnableTimeout()
 {
-  DRV8301_Obj *obj = (DRV8301_Obj *)handle;
 
-  obj->enableTimeOut = false;
+
+  //obj->enableTimeOut = false;
 
   return;
 }
@@ -955,11 +855,10 @@ static inline void DRV8301_resetEnableTimeout(DRV8301_Handle handle)
 
 //! \brief     Resets the RX fifo timeout flag
 //! \param[in] handle   The DRV8301 handle
-static inline void DRV8301_resetRxTimeout(DRV8301_Handle handle)
+static inline void DRV8301_resetRxTimeout()
 {
-  DRV8301_Obj *obj = (DRV8301_Obj *)handle;
 
-  obj->RxTimeOut = false;
+  //obj->RxTimeOut = false;
 
   return;
 }
@@ -969,76 +868,65 @@ static inline void DRV8301_resetRxTimeout(DRV8301_Handle handle)
 //! \param[in] handle     The DRV8301 handle
 //! \param[in] ampNumber  The shunt amplifier number
 //! \param[in] mode       The DC calibration mode
-extern void DRV8301_setDcCalMode(DRV8301_Handle handle,
+extern void DRV8301_setDcCalMode(
                                  const DRV8301_ShuntAmpNumber_e ampNumber,
                                  const DRV8301_DcCalMode_e mode);
 
-
-//! \brief     Sets the GPIO handle in the DRV8301
-//! \param[in] handle     The DRV8301 handle
-//! \param[in] gpioHandle  The GPIO handle to use
-void DRV8301_setGpioHandle(DRV8301_Handle handle,GPIO_Handle gpioHandle);
-
-
-//! \brief     Sets the GPIO number in the DRV8301
-//! \param[in] handle     The DRV8301 handle
-//! \param[in] gpioHandle  The GPIO number to use
-void DRV8301_setGpioNumber(DRV8301_Handle handle,GPIO_Number_e gpioNumber);
 
 
 //! \brief     Sets the over current level in terms of Vds
 //! \param[in] handle    The DRV8301 handle
 //! \param[in] VdsLevel  The over current level, V
-extern void DRV8301_setOcLevel(DRV8301_Handle handle,const DRV8301_VdsLevel_e VdsLevel);
+extern void DRV8301_setOcLevel(const DRV8301_VdsLevel_e VdsLevel);
 
 
 //! \brief     Sets the over current mode
 //! \param[in] handle  The DRV8301 handle
 //! \param[in] mode    The over current mode
-extern void DRV8301_setOcMode(DRV8301_Handle handle,const DRV8301_OcMode_e mode);
+extern void DRV8301_setOcMode(const unsigned int mode);
 
 
 //! \brief     Sets the over current off time mode
 //! \param[in] handle   The DRV8301 handle
 //! \param[in] mode     The over current off time mode
-extern void DRV8301_setOcOffTimeMode(DRV8301_Handle handle,const DRV8301_OcOffTimeMode_e mode);
+extern void DRV8301_setOcOffTimeMode(const DRV8301_OcOffTimeMode_e mode);
 
 
 //! \brief     Sets the over current, temperature warning mode
 //! \param[in] handle  The DRV8301 handle
 //! \param[in] mode    The over current, temperature warning mode
-extern void DRV8301_setOcTwMode(DRV8301_Handle handle,const DRV8301_OcTwMode_e mode);
+extern void DRV8301_setOcTwMode(const DRV8301_OcTwMode_e mode);
 
 
 //! \brief     Sets the peak current value
 //! \param[in] handle       The DRV8301 handle
 //! \param[in] peakCurrent  The peak current value
-extern void DRV8301_setPeakCurrent(DRV8301_Handle handle,const DRV8301_PeakCurrent_e peakCurrent);
+extern void DRV8301_setPeakCurrent(const DRV8301_PeakCurrent_e peakCurrent);
 
 
 //! \brief     Sets the PWM mode
 //! \param[in] handle  The DRV8301 handle
 //! \param[in] mode    The PWM mode
-extern void DRV8301_setPwmMode(DRV8301_Handle handle,const DRV8301_PwmMode_e mode);
+extern void DRV8301_setPwmMode(const unsigned int mode);
 
 
 //! \brief     Sets the shunt amplifier gain value
 //! \param[in] handle  The DRV8301 handle
 //! \param[in] gain    The shunt amplifier gain value
-extern void DRV8301_setShuntAmpGain(DRV8301_Handle handle,const DRV8301_ShuntAmpGain_e gain);
+extern void DRV8301_setShuntAmpGain(const DRV8301_ShuntAmpGain_e gain);
 
 
 //! \brief     Sets the SPI handle in the DRV8301
 //! \param[in] handle     The DRV8301 handle
 //! \param[in] spiHandle  The SPI handle to use
-void DRV8301_setSpiHandle(DRV8301_Handle handle,SPI_Handle spiHandle);
+void DRV8301_setSpiHandle();
 
 
 //! \brief     Writes data to the DRV8301 register
 //! \param[in] handle   The DRV8301 handle
 //! \param[in] regName  The register name
 //! \param[in] data     The data value
-extern void DRV8301_writeSpi(DRV8301_Handle handle,const DRV8301_RegName_e regName,const uint16_t data);
+extern void DRV8301_writeSpi(const int regName,const unsigned int data);
 
 
 //! \brief     Interface to all 8301 SPI variables
@@ -1062,17 +950,17 @@ extern void DRV8301_writeSpi(DRV8301_Handle handle,const DRV8301_RegName_e regNa
 //!
 //! \param[in] handle  The DRV8301 handle
 //! \param[in] Spi_8301_Vars  The (DRV_SPI_8301_Vars_t) structure that contains all DRV8301 Status/Control register options
-extern void DRV8301_writeData(DRV8301_Handle handle, DRV_SPI_8301_Vars_t *Spi_8301_Vars);
+extern void DRV8301_writeData( );
 
 
 //! \param[in] handle  The DRV8301 handle
 //! \param[in] Spi_8301_Vars  The (DRV_SPI_8301_Vars_t) structure that contains all DRV8301 Status/Control register options
-extern void DRV8301_readData(DRV8301_Handle handle, DRV_SPI_8301_Vars_t *Spi_8301_Vars);
+extern void DRV8301_readData( );
 
 
 //! \brief     Initialize the interface to all 8301 SPI variables
 //! \param[in] handle  The DRV8301 handle
-extern void DRV8301_setupSpi(DRV8301_Handle handle, DRV_SPI_8301_Vars_t *Spi_8301_Vars);
+extern void DRV8301_setupSpi( );
 
 
 #endif /* DRV8301_H_ */

@@ -38,10 +38,14 @@
 #include "posspeed.h"   // Example specific Include file
 #include "ecap.h"
 #include "libSCI.h"
+#include "libSPI.h"
 #include "ePWM.h"
 #include "adc.h"
 
+
+
 POSSPEED qep_data=POSSPEED_DEFAULTS;
+//drv8301_t drv8301 = DRV8301_DEFAULTS;
 
 void main(void) {
    memcpy(&RamfuncsRunStart, &RamfuncsLoadStart, (size_t)&RamfuncsLoadSize);
