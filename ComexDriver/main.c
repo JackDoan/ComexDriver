@@ -29,6 +29,9 @@
 //!				http://www.ti.com/lit/ug/spru790d/spru790d.pdf
 //!  ePWM: http://www.ti.com/lit/ug/spru791f/spru791f.pdf
 //!  pins http://www.ti.com/lit/ug/sprui11/sprui11.pdf
+//! ECAP1 = J6-55
+//! ECAP2 = J6-54
+//! ECAP3 = J6-58
 
 #include <stdint.h>
 #include <stdio.h>
@@ -52,6 +55,8 @@ void main(void) {
 // Step 1. Initialize System Control:
 // PLL, WatchDog, enable Peripheral Clocks
    InitSysCtrl();
+   SysCtrlRegs.PCLKCR1.bit.EQEP2ENCLK = 0;    // eQEP2
+   SysCtrlRegs.PCLKCR0.bit.SPIBENCLK = 0;     // SPI-B
    InitFlash();
 // Step 2. Initalize GPIO: 
 // InitGpio();  // Skipped; not needed
@@ -110,23 +115,25 @@ void main(void) {
    ERTM;   // Enable Global realtime interrupt DBGM
    
    qep_data.init(&qep_data);
-   int printData = 0;
+   //int printData = 10001;
    readHallStateFlag = 1;
    char writeBuffer[40] = {0};
-
+   int lastPhase = 0;
 	while(1) {
 		//qep_data.calc(&qep_data);
 		if (readHallStateFlag)
 			updateHallState();
-		if (printData) {
-			sprintf(writeBuffer, "Hall State: %d\n", Phase);
+		if (lastPhase != Phase) {
+			//\033[2J\033[0;0H\r
+			sprintf(writeBuffer, "Hall State: %d\n\r", Phase);
+			scia_msg(writeBuffer);
+			//sprintf(writeBuffer, "Velocity: %d rpm\n", qep_data.SpeedRpm_fr);
 			//scia_msg(writeBuffer);
-			sprintf(writeBuffer, "Velocity: %d rpm\n", qep_data.SpeedRpm_fr);
+			//sprintf(writeBuffer, "Mechanical Angle: %d degrees\n", (int)qep_data.theta_mech*360);
 			//scia_msg(writeBuffer);
-			sprintf(writeBuffer, "Mechanical Angle: %d degrees\n", (int)qep_data.theta_mech*360);
+			//sprintf(writeBuffer, "Electrical Angle: %d\n\r", (int)qep_data.theta_elec);
 			//scia_msg(writeBuffer);
-			sprintf(writeBuffer, "Electrical Angle: %d\n\r", (int)qep_data.theta_elec);
-			//scia_msg(writeBuffer);
+			lastPhase = Phase;
 		}
 	}
 

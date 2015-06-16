@@ -27,13 +27,13 @@ void epwmInit(int freq, int duty, int chop) {
 	EPwm1Regs.AQCTLA.bit.CAD = AQ_CLEAR;
 	EPwm1Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // enable Dead-band module
 	EPwm1Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // Active Hi complementary
-	EPwm1Regs.DBFED = 20; // FED = 20 TBCLKs  Target value = ~1us
-	EPwm1Regs.DBRED = 20; // RED = 20 TBCLKs
+	EPwm1Regs.DBFED = 90; // FED = 90 TBCLKs  Target value = ~1us
+	EPwm1Regs.DBRED = 90; // RED = 90 TBCLKs
 	EPwm1Regs.PCCTL.bit.CHPEN = enableChops;
 	EPwm1Regs.PCCTL.bit.CHPFREQ = 0b111; //divide by 8 = ~1 MHz
 	EPwm1Regs.PCCTL.bit.CHPDUTY = chop;
 
-	EPwm2Regs.TBPRD = freq; // Period = 2(freq)/(TBCLK) = freq/40,000
+	EPwm2Regs.TBPRD = freq; // Period = 2(freq)/(TBCLK) = freq/45,000
 	EPwm2Regs.TBPHS.half.TBPHS = freq/3; // Set Phase register
 	EPwm2Regs.TBCTL.bit.CTRMODE = TB_COUNT_UPDOWN; // Symmetrical mode
 	EPwm2Regs.TBCTL.bit.PHSEN = TB_ENABLE; // slave module
@@ -48,13 +48,13 @@ void epwmInit(int freq, int duty, int chop) {
 	EPwm2Regs.AQCTLA.bit.CAD = AQ_CLEAR;
 	EPwm2Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // enable Dead-band module
 	EPwm2Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // Active Hi complementary
-	EPwm2Regs.DBFED = 20; // FED = 20 TBCLKs  Target value = ~1us
-	EPwm2Regs.DBRED = 20; // RED = 20 TBCLKs
+	EPwm2Regs.DBFED = 90; // FED = 90 TBCLKs  Target value = ~1us
+	EPwm2Regs.DBRED = 90; // RED = 90 TBCLKs
 	EPwm2Regs.PCCTL.bit.CHPEN = enableChops;
 	EPwm2Regs.PCCTL.bit.CHPFREQ = 0b111; //divide by 8 = ~1 MHz
 	EPwm2Regs.PCCTL.bit.CHPDUTY = chop;
 
-	EPwm3Regs.TBPRD = freq; // Period = 2(freq)/(TBCLK) = freq/40,000
+	EPwm3Regs.TBPRD = freq; // Period = 2(freq)/(TBCLK) = freq/45,000
 	EPwm3Regs.TBPHS.half.TBPHS = freq/3; // Set Phase register
 	EPwm3Regs.TBCTL.bit.CTRMODE = TB_COUNT_UPDOWN; // Symmetrical mode
 	EPwm3Regs.TBCTL.bit.PHSEN = TB_ENABLE; // slave module
@@ -69,8 +69,8 @@ void epwmInit(int freq, int duty, int chop) {
 	EPwm3Regs.AQCTLA.bit.CAD = AQ_CLEAR;
 	EPwm3Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // enable Dead-band module
 	EPwm3Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // Active Hi complementary
-	EPwm3Regs.DBFED = 20; // FED = 20 TBCLKs  Target value = ~1us
-	EPwm3Regs.DBRED = 20; // RED = 20 TBCLKs
+	EPwm3Regs.DBFED = 90; // FED = 90 TBCLKs  Target value = ~1us
+	EPwm3Regs.DBRED = 90; // RED = 90 TBCLKs
 	EPwm3Regs.PCCTL.bit.CHPEN = enableChops;
 	EPwm3Regs.PCCTL.bit.CHPFREQ = 0b111; //divide by 8 = ~1 MHz
 	EPwm3Regs.PCCTL.bit.CHPDUTY = chop;
