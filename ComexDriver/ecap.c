@@ -20,14 +20,22 @@ void InitECapRegs(void);
 int HallsensorA;
 int HallsensorB;
 int HallsensorC;
+int CoilA;
+int CoilB;
+int CoilC;
 int Phase;
 int Electrical_angle;
 int readHallStateFlag;
 
+//How to interpret int Coil(x)
+// 4 = On High
+// 1 = On Low
+// 0 = Off
+
 //How to interpret int Phase:
-// 0b|xx|yy|zz
+// 0b|0x0x|0y0y|0z0z
 // xx = phase A | yy = phase B | zz = phase C
-// 10 = high | 00 = off | 01 = low | 11 = illegal
+// 0100 = high | 0000 = off | 0001 = low | x1x1 = illegal
 
 void updateHallState() {
 	readHallStateFlag = 0;
@@ -37,13 +45,18 @@ void updateHallState() {
 		   {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 0; //000
+				   CoilA = CoilB = CoilC = 0;
 				   Phase = 0;//illegal state!
+				   
 				   }
 			   else {//HallsensorC == 1
 				   Electrical_angle = 240; //001
 				   //Phase = 0b000110;
 				   //Phase = 0b011000;
-				   Phase = 0b000101000000;
+				   CoilA = 1;
+				   CoilB = 4;
+				   CoilC = 0;
+				   //Phase = 0b000101000000;
 		   			}
 		   }
 		   else //HallsensorB == 1
@@ -51,12 +64,18 @@ void updateHallState() {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 120; //010
 				   //Phase = 0b011000;
-				   Phase = 0b010000000001;
+				   CoilA = 4;
+				   CoilB = 0;
+				   CoilC = 1;
+				   //Phase = 0b010000000001;
 				   }
 			   else{
 				   Electrical_angle = 180; //011
 				   //Phase = 0b010010;
-				   Phase = 0b000001000001;
+				   CoilA = 0;
+				   CoilB = 4;
+				   CoilC = 1;
+				   //Phase = 0b0000|0100|0001;
 				   }
 		   }
 	   }
@@ -67,12 +86,18 @@ void updateHallState() {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 0; //100
 				   //Phase = 0b100001;
-				   Phase = 0b000000010100;
+				   CoilA = 0;
+				   CoilB = 1;
+				   CoilC = 4;
+				   //Phase = 0b000000010100;
 				   }
 			   else {//HallsensorC == 1
 				   Electrical_angle = 300; //101
 				   //Phase = 0b100100;
-				   Phase = 0b000100000100;
+				   CoilA = 1;
+				   CoilB = 0;
+				   CoilC = 4;
+				   //Phase = 0b000100000100;
 				   }
 		   }
 		   else //HallsensorB == 1
@@ -80,11 +105,15 @@ void updateHallState() {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 60; //110
 				   //Phase = 0b001001;
-				   Phase = 0b010000010000;
+				   CoilA = 4;
+				   CoilB = 1;
+				   CoilC = 0;
+				   //Phase = 0b010000010000;
 				   }
 			   else {
 				   Electrical_angle = 0; //111
-				   Phase = 0;//illegal state!
+				   CoilA = CoilB = CoilC = 0;
+				   //Phase = 0;//illegal state!
 				   }
 		   }
 
@@ -95,13 +124,12 @@ void updateHallState() {
 	//NOTE: I've opted to generate 6 independent waveforms and simply enable/disable
 	//NOTE: output for the relevant pins for instantaneous control.
 	
-	//NANDing Phase with GPAMUX1 will set all bits which are 1 in Phase to 0 in GPAMUX1
-	//therefore, we need to invert Phase, cast it to an inverted Uint32 to match the size of GPAMUX1,
-	// and finally NAND them together. This is all done in one line.
 	EALLOW;
-	GpioCtrlRegs.GPAMUX1.all &= (~Phase); //disable first, for safety
+	//GpioCtrlRegs.GPAMUX1.all &= (~Phase); //disable things first, for safety
+	GpioCtrlRegs.GPAMUX1.all &= (~0x00000FFF);
 	// next, we need to OR GPAMUX1 with Phase, to set all the bits which actually are 1, to 1.
 	//TODO: examine whether or not we need more dead time
+	Phase |= ((CoilC << 8)|(CoilB << 4)|(CoilA << 0));
 	GpioCtrlRegs.GPAMUX1.all |= Phase; //then enable
 	EDIS;
 }

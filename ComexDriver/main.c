@@ -48,7 +48,7 @@
 
 
 POSSPEED qep_data=POSSPEED_DEFAULTS;
-//drv8301_t drv8301 = DRV8301_DEFAULTS;
+drv8301_t drv8301;
 
 void main(void) {
    memcpy(&RamfuncsRunStart, &RamfuncsLoadStart, (size_t)&RamfuncsLoadSize);
@@ -67,6 +67,9 @@ void main(void) {
    InitECap1Gpio();
    InitECap2Gpio();
    InitECap3Gpio();
+   setupDrv8301();
+   setupSpiA();
+   DRV8301_setupSpi();
 
 
    DINT;
@@ -117,15 +120,17 @@ void main(void) {
    qep_data.init(&qep_data);
    //int printData = 10001;
    readHallStateFlag = 1;
-   char writeBuffer[40] = {0};
+   char writeBuffer[80] = {0};
    int lastPhase = 0;
+   DRV8301_enable()
 	while(1) {
 		//qep_data.calc(&qep_data);
 		if (readHallStateFlag)
 			updateHallState();
 		if (lastPhase != Phase) {
 			//\033[2J\033[0;0H\r
-			sprintf(writeBuffer, "Hall State: %d\n\r", Phase);
+			//sprintf(writeBuffer, "Hall State: %d\n\r", Phase);
+			sprintf(writeBuffer, "Hall State: %d %d %d\n\r", CoilA, CoilB, CoilC);
 			scia_msg(writeBuffer);
 			//sprintf(writeBuffer, "Velocity: %d rpm\n", qep_data.SpeedRpm_fr);
 			//scia_msg(writeBuffer);
@@ -134,6 +139,18 @@ void main(void) {
 			//sprintf(writeBuffer, "Electrical Angle: %d\n\r", (int)qep_data.theta_elec);
 			//scia_msg(writeBuffer);
 			lastPhase = Phase;
+		}
+		DRV8301_readData()
+		if (!Phase || drv8301.fault || drv8301.OverTempShutdown || drv8301.OverTempWarning) {
+			while (!Phase || drv8301.fault || drv8301.OverTempShutdown || drv8301.OverTempWarning){
+				//GpioDataRegs.GPACLEAR.GPIO(something) = 1;
+				delay(10000);
+				sprintf(writeBuffer, "\aERROR DECTECTED: \n\r Hall State: %d %d %d\n\r", CoilA, CoilB, CoilC);
+				scia_msg(writeBuffer);
+				sprintf(writeBuffer, "Fault Bit: %d\n\rOverTempShutdown: %d\n\rOverTempWarning%d\n\r", drv8301.fault, drv8301.OverTempShutdown, drv8301.OverTempWarning);
+				scia_msg(writeBuffer);
+			}
+		//GpioDataRegs.GPASET.GPIO(something) = 1;
 		}
 	}
 

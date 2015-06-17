@@ -42,6 +42,8 @@ struct drv8301_t {
     int tempWarning;
     int fault;
     int gain;
+	int OverTempWarning;
+	int OverTempShutdown;
 
     //BIT LOCATIONS
 
