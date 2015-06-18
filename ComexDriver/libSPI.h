@@ -8,7 +8,7 @@
 #ifndef LIBSPI_H_
 #define LIBSPI_H_
 
-union drv8301_bits_t {
+typedef struct  {
 
 	int StatusRegister1;
 	int StatusRegister2;
@@ -22,7 +22,7 @@ union drv8301_bits_t {
 	int deviceID;
 
 
-};
+}drv8301_bits_t;
 
 
 
@@ -44,15 +44,22 @@ struct drv8301_t {
     int gain;
 	int OverTempWarning;
 	int OverTempShutdown;
+	int deviceID;
 
     //BIT LOCATIONS
 
-    union drv8301_bits_t bits;
+    drv8301_bits_t bits;
 
 
 };
 
 extern volatile struct drv8301_t drv8301;
+
+void DRV8301_enable();
+void DRV8301_readData();
+void DRV8301_setupSpi();
+void setupDrv8301();
+void setupSpiA();
 
 
 

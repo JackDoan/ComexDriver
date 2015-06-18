@@ -10,9 +10,9 @@
 #include "DSP28x_Project.h"
 #include "libSPI.h"
 
-#pragma DATA_SECTION(drv8301,"drv8301File");
-struct drv8301_t;
-volatile struct drv8301_t drv8301;
+//#pragma DATA_SECTION(drv8301,"drv8301File");
+//struct drv8301_t;
+extern volatile struct drv8301_t drv8301;
 //typedef struct drv8301_t drv8301_t;
 
 
@@ -23,7 +23,7 @@ void setupDrv8301() {
 	drv8301.bits.ControlRegister1 = 2 << 11;
 	drv8301.bits.ControlRegister2 = 3 << 11;
 	drv8301.bits.OverCurrentMode = 1 << 15;
-	drv8301.bits.PwmMode = 3 << 4; //check this
+	drv8301.bits.PwmMode = 1 << 3;
 	drv8301.bits.OverCurrentAdjust = 31 << 6;
 	drv8301.bits.tempWarning = 3 << 0;
 	drv8301.bits.fault = 1 << 10;
@@ -132,10 +132,7 @@ void DRV8301_writeData()
     DRV8301_writeSpi(drv8301.bits.ControlRegister1,drvData);
 
     // Update Control Register 2
-    drvData = drv8301.tempWarning     |  \
-              drv8301.gain          |  \
-                 Ctrl_Reg_2.DC_CAL_CH1p2  |  \
-                 Ctrl_Reg_2.OC_TOFF;
+    drvData = drv8301.tempWarning | drv8301.gain;
     DRV8301_writeSpi(drv8301.bits.ControlRegister2,drvData);
 
     drv8301.SndCmd = false;
@@ -150,8 +147,8 @@ void DRV8301_readData()
   unsigned int drvDataNew;
 
 
-  if(drv8301.RcvCmd)
-  {
+  //if(1)
+  //{
     // Update Status Register 1
     drvDataNew = DRV8301_readSpi(drv8301.bits.StatusRegister1);
     drv8301.fault = (drvDataNew & drv8301.bits.fault);
@@ -174,11 +171,11 @@ void DRV8301_readData()
     drvDataNew = DRV8301_readSpi(drv8301.bits.ControlRegister2);
     drv8301.tempWarning = (drvDataNew & drv8301.bits.tempWarning);
     drv8301.gain = (drvDataNew & (3 << 2));
-    drv8301.Ctrl_Reg_2.DC_CAL_CH1p2 = (drvDataNew & ((1 << 4) | (1 << 5)));
-    drv8301.Ctrl_Reg_2.OC_TOFF = (drvDataNew & (1 << 6));
+    //drv8301.Ctrl_Reg_2.DC_CAL_CH1p2 = (drvDataNew & ((1 << 4) | (1 << 5)));
+    //drv8301.Ctrl_Reg_2.OC_TOFF = (drvDataNew & (1 << 6));
 
-    drv8301.RcvCmd = false;
-  }
+    //drv8301.RcvCmd = false;
+  //}
 
   return;
 }  // end of DRV8301_readData() function
@@ -244,7 +241,7 @@ void DRV8301_enable()
   unsigned int n = 0;
 
   // Enable the drv8301
-  //GPIO_setHigh(obj->gpioHandle,obj->gpioNumber);
+  GpioDataRegs.GPBSET.bit.GPIO50 = 1;
 
   enableWaitTimeOut = 0;
 

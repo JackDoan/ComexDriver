@@ -20,7 +20,16 @@ extern int HallsensorC;
 extern int Phase;
 extern int Electrical_angle;
 extern int readHallStateFlag;
-
+extern int CoilA;
+extern int CoilB;
+extern int CoilC;
+extern int gogo;
+extern int aGoHigh;
+extern int aGoLow;
+extern int bGoHigh;
+extern int bGoLow;
+extern int cGoHigh;
+extern int cGoLow;
 
 
 #endif /* ECAP_H_ */
