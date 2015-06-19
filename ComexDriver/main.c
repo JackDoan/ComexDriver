@@ -98,13 +98,13 @@ void main(void) {
    PieVectTable.ECAP2_INT = &ecap2_isr;	 // ''
    PieVectTable.ECAP3_INT = &ecap3_isr;  // ''
    PieVectTable.ADCINT1 = &adc_isr; //
-   PieVectTable.SCIRXINTA = &scia_isr;
+   //PieVectTable.SCIRXINTA = &scia_isr;
    EDIS;
 
 // Step 4. Initialize all the Device Peripherals:
    InitECapRegs();
    scia_init();
-   epwmInit(1,2,0); //10kHz, 5% duty, no chop
+   epwmInit(1,2,0); //10kHz, 50% duty, no chop
    InitAdc();
    AdcOffsetSelfCal();
    
@@ -131,32 +131,24 @@ void main(void) {
    int lastPhase = 0;
    gogo = 1;
    DRV8301_enable();
-   DELAY_US(200);
    DRV8301_setupSpi();
-   aGoHigh = 0;
-   aGoLow = 0;
-   bGoHigh = 0;
-   bGoLow = 0;
-   cGoHigh = 0;
-   cGoLow = 0;
    i = 0;
 	while(1) {
-		//qep_data.calc(&qep_data);
+		qep_data.calc(&qep_data);
 		if (readHallStateFlag)
 			updateHallState();
-		//if (lastPhase != Phase) {
+		if (lastPhase != Phase) {
 			//\033[2J\033[0;0H\r
-			//sprintf(writeBuffer, "Hall State: %d\n\r", Phase);
-			//sprintf(writeBuffer, "Hall State: %d %d %d\n\r", CoilA, CoilB, CoilC);
-			//scia_msg(writeBuffer);
-			//sprintf(writeBuffer, "Velocity: %d rpm\n\r", qep_data.SpeedRpm_fr);
-			//scia_msg(writeBuffer);
+			sprintf(writeBuffer, "Hall State: %d\n\r", (int)Phase);
+			scia_msg(writeBuffer);
+		    sprintf(writeBuffer, "Velocity: %d rpm\n\r", qep_data.SpeedRpm_fr);
+			scia_msg(writeBuffer);
 			//sprintf(writeBuffer, "Mechanical Angle: %f degrees\n\r", qep_data.theta_mech*360);
 			//scia_msg(writeBuffer);
 			//sprintf(writeBuffer, "Electrical Angle: %f\n\r", qep_data.theta_elec);
 			//scia_msg(writeBuffer);
-			//lastPhase = Phase;
-		//}
+			lastPhase = Phase;
+		}
 		//DRV8301_readData();
 		//if (!Phase /*|| drv8301.fault || drv8301.OverTempShutdown || drv8301.OverTempWarning*/) {
 			//while (!Phase || drv8301.fault || drv8301.OverTempShutdown || drv8301.OverTempWarning){

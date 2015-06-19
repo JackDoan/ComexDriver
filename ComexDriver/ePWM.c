@@ -65,7 +65,7 @@ void epwmInit(int freq, int duty, int chop) {
 	EPwm3Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW;
 	EPwm3Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // load on CTR=Zero
 	EPwm3Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // load on CTR=Zero
-	EPwm3Regs.AQCTLA.bit.CAU = AQ_SET; // set actions for EPWM1A
+	EPwm3Regs.AQCTLA.bit.CAU = AQ_SET; // set actions
 	EPwm3Regs.AQCTLA.bit.CAD = AQ_CLEAR;
 	EPwm3Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // enable Dead-band module
 	EPwm3Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // Active Hi complementary

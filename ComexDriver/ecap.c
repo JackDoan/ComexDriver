@@ -21,35 +21,24 @@ int gogo;
 int HallsensorA;
 int HallsensorB;
 int HallsensorC;
-int CoilA;
-int CoilB;
-int CoilC;
+int HallState;
 Uint32 Phase;
 int Electrical_angle;
 int readHallStateFlag;
-int aGoHigh;
-int aGoLow;
-int bGoHigh;
-int bGoLow;
-int cGoHigh;
-int cGoLow;
-
-int phaseHistory[36];
+int direction; //0 = forward, 1 = reverse
+//int phaseHistory[36];
 int i;
 
-//How to interpret int Coil(x)
+//How to interpret int Phase
+// 0x(CoilC)(CoilB)(CoilA)
 // 4 = On High
 // 1 = On Low
 // 0 = Off
 
-//How to interpret int Phase:
-// 0b|0x0x|0y0y|0z0z
-// xx = phase A | yy = phase B | zz = phase C
-// 0100 = high | 0000 = off | 0001 = low | x1x1 = illegal
 
 void updateHallState() {
 	readHallStateFlag = 0;
-	   if(HallsensorA == 0)
+	   /*if(HallsensorA == 0)
 	   {
 		   if (HallsensorB == 0)
 		   {
@@ -99,7 +88,33 @@ void updateHallState() {
 				   }
 		   }
 
-	   }
+	   }*/
+	switch (HallState) {
+		case 0b000:
+			Phase = 0;
+			break;
+		case 0b001:
+			Phase = 0x140;
+			break;
+		case 0b010:
+			Phase = 0x401;
+			break;
+		case 0b011:
+			Phase = 0x041;
+			break;
+		case 0b100:
+			Phase = 0x014;
+			break;
+		case 0b101:
+			Phase = 0x104;
+			break;
+		case 0b110:
+			Phase = 0x410;
+			break;
+		case 0b111:
+			Phase = 0;
+			break;
+	}
 	//update commutation
 	//NOTE: this is not representative of the final product.
 	//NOTE: but, for open-loop control, instead of controlling 6 PWM waves,
@@ -107,33 +122,121 @@ void updateHallState() {
 	//NOTE: output for the relevant pins for instantaneous control.
 	
 	EALLOW;
-	//GpioCtrlRegs.GPAMUX1.all &= (~Phase); //disable things first, for safety
-	Uint32 mask = 0xFFFFF000;
-	GpioCtrlRegs.GPAMUX1.all &= mask;
+	GpioCtrlRegs.GPAMUX1.all &= 0xFFFFF000;
 
 	//keep a buffer of phase transitions
-	//phaseHistory[i] = Phase;
-	//i++;
-	//if (i == 36) {
-	//	i = 0;
-	//}
+	/*phaseHistory[i] = Phase;
+	i++;
+	if (i == 36) {
+		i = 0;
+	}*/
 	//end buffer
 
 	if (gogo){
-		//Phase = 0;
-		//Phase |= ((CoilC << 8)|(CoilB << 4)|(CoilA << 0));
 		GpioCtrlRegs.GPAMUX1.all |= Phase; //then enable
 	}
 	EDIS;
 }
+
+
+
+__interrupt void ecap1_isr(void)
+{
+	if(ECap1Regs.ECFLG.bit.CEVT1 || ECap1Regs.ECFLG.bit.CEVT3)   //  When detect rising edge of the signal Hall sensor state = 1
+	   {
+		 HallState |= 0b100;
+		 ECap1Regs.ECCLR.all |= 0b01011;
+	     //HallsensorA = 1;
+	    // ECap1Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
+	     //ECap1Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
+	     //aGoHigh++;
+	   }
+
+	else if(ECap1Regs.ECFLG.bit.CEVT2 || ECap1Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
+	   {
+		  HallState &= 0b011;
+	      //HallsensorA = 0;
+	      ECap1Regs.ECCLR.all |= 0b10101;
+		  //ECap1Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
+		  //ECap1Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
+		 // aGoLow++;
+	   }
+   // Acknowledge this interrupt to receive more interrupts from group 4
+   readHallStateFlag = 1;
+   //ECap1Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
+   PieCtrlRegs.PIEACK.all = PIEACK_GROUP4;
+}
+
+
+__interrupt void ecap2_isr(void)
+{
+	if(ECap2Regs.ECFLG.bit.CEVT1 || ECap2Regs.ECFLG.bit.CEVT3)   //  When detect rising edge of the signal Hall sensor state = 1
+	   {
+		 HallState |= 0b010;
+		 ECap2Regs.ECCLR.all |= 0b01011;
+	     //HallsensorB = 1;
+	     //ECap2Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
+	     //ECap2Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
+	     //bGoHigh++;
+	   }
+
+	else if(ECap2Regs.ECFLG.bit.CEVT2 || ECap2Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
+	   {
+		  HallState &= 0b101;
+	      //HallsensorB = 0;
+		  //ECap2Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
+		  //ECap2Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
+		 // bGoLow++;
+		 ECap2Regs.ECCLR.all |= 0b10101;
+	   }
+   // Acknowledge this interrupt to receive more interrupts from group 4
+   readHallStateFlag = 1;
+   //ECap2Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
+   PieCtrlRegs.PIEACK.all = PIEACK_GROUP4;
+}
+
+
+__interrupt void ecap3_isr(void)
+{
+	if(ECap3Regs.ECFLG.bit.CEVT1 || ECap3Regs.ECFLG.bit.CEVT3)   //  When detect rising edge of the signal Hall sensor state = 1
+	   {
+		 HallState |= 0b001;
+	     //HallsensorC = 1;
+	     //ECap3Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
+	     //ECap3Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
+	     ECap3Regs.ECCLR.all |= 0b01011;
+	     //cGoHigh++;
+	   }
+
+	else if(ECap3Regs.ECFLG.bit.CEVT2 || ECap3Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
+	   {
+		  HallState &= 0b110;
+	      //HallsensorC = 0;
+		  //ECap3Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
+		  //ECap3Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
+		  ECap3Regs.ECCLR.all |= 0b10101;
+		  //cGoLow++;
+	   }
+
+   // Acknowledge this interrupt to receive more interrupts from group 4
+   readHallStateFlag = 1;
+   //ECap3Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
+   PieCtrlRegs.PIEACK.all = PIEACK_GROUP4;
+}
+
+
 
 void InitECapRegs()
 {
    HallsensorA = 0;
    HallsensorB = 0;
    HallsensorC = 0;
+   HallState = 0;
    Phase = 0;
    Electrical_angle = 0;
+   direction = 0;
+   int forwardPhaseTable[] = {0x014, 0x410, 0x401, 0x041, 0x140, 0x104};
+   //reversePhaseTable[] = {0x104, 0x140, 0x041, 0x401, 0x410, 0x014};
 ///////////////////////////////////////////////
 /////// GPIO for commutation
 ///////////////////////////////////////////////
@@ -241,84 +344,41 @@ void InitECapRegs()
    GpioCtrlRegs.GPADIR.bit.GPIO25 = 0;
    GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 0;	         //  GPIO26 as I/O
    GpioCtrlRegs.GPADIR.bit.GPIO26 = 0;
-   HallsensorA = GpioDataRegs.GPADAT.bit.GPIO24;  // read the signal from GPIO24
-   HallsensorB = GpioDataRegs.GPADAT.bit.GPIO25;  // read the signal from GPIO25
-   HallsensorC = GpioDataRegs.GPADAT.bit.GPIO26;  // read th signal from GPIO26
+   //HallsensorA = GpioDataRegs.GPADAT.bit.GPIO24;  // read the signal from GPIO24
+   //HallsensorB = GpioDataRegs.GPADAT.bit.GPIO25;  // read the signal from GPIO25
+   //HallsensorC = GpioDataRegs.GPADAT.bit.GPIO26;  // read th signal from GPIO26
+   HallState = (GpioDataRegs.GPADAT.bit.GPIO24 << 2)|(GpioDataRegs.GPADAT.bit.GPIO25 << 1)|(GpioDataRegs.GPADAT.bit.GPIO26 << 0);
    GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 1;
    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 1;
    GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 1;
+   updateHallState();
+   //forwardPhaseTable[] = {0x014, 0x410, 0x401, 0x041, 0x140, 0x104};
+   i = 0;
+   switch (Phase) {
+   case 0x014:
+   	   i = 0 - (2*direction);
+	   break;
+   case 0x410:
+	   i = 1 - (2*direction);
+	   break;
+   case 0x401:
+	   i = 2 - (2*direction);
+	   break;
+   case 0x041:
+	   i = 3 - (2*direction);
+	   break;
+   case 0x140:
+	   i = 4 - (2*direction);
+	   break;
+   case 0x104:
+	   i = 5 - (2*direction);
+	   break;
+   }
+   if (i < 0)
+       i = 5;
+   else if (i > 5)
+       i = 0;
+
+   Phase = forwardPhaseTable[i];
    EDIS;
-}
-
-
-__interrupt void ecap1_isr(void)
-{
-	if(ECap1Regs.ECFLG.bit.CEVT1 || ECap1Regs.ECFLG.bit.CEVT3)   //  When detect rising edge of the signal Hall sensor state = 1
-	   {
-	     HallsensorA = 1;
-	     ECap1Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
-	     ECap1Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
-	     //aGoHigh++;
-	   }
-
-	else if(ECap1Regs.ECFLG.bit.CEVT2 || ECap1Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
-	   {
-	      HallsensorA = 0;
-		  ECap1Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
-		  ECap1Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
-		 // aGoLow++;
-	   }
-   // Acknowledge this interrupt to receive more interrupts from group 4
-   readHallStateFlag = 1;
-   ECap1Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
-   PieCtrlRegs.PIEACK.all = PIEACK_GROUP4;
-}
-
-
-__interrupt void ecap2_isr(void)
-{
-	if(ECap2Regs.ECFLG.bit.CEVT1 || ECap2Regs.ECFLG.bit.CEVT3)   //  When detect rising edge of the signal Hall sensor state = 1
-	   {
-	     HallsensorB = 1;
-	     ECap2Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
-	     ECap2Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
-	     //bGoHigh++;
-	   }
-
-	else if(ECap2Regs.ECFLG.bit.CEVT2 || ECap2Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
-	   {
-	      HallsensorB = 0;
-		  ECap2Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
-		  ECap2Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
-		 // bGoLow++;
-	   }
-   // Acknowledge this interrupt to receive more interrupts from group 4
-   readHallStateFlag = 1;
-   ECap2Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
-   PieCtrlRegs.PIEACK.all = PIEACK_GROUP4;
-}
-
-
-__interrupt void ecap3_isr(void)
-{
-	if(ECap3Regs.ECFLG.bit.CEVT1 || ECap3Regs.ECFLG.bit.CEVT3)   //  When detect rising edge of the signal Hall sensor state = 1
-	   {
-	     HallsensorC = 1;
-	     ECap3Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
-	     ECap3Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
-	     //cGoHigh++;
-	   }
-
-	else if(ECap3Regs.ECFLG.bit.CEVT2 || ECap3Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
-	   {
-	      HallsensorC = 0;
-		  ECap3Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
-		  ECap3Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
-		  //cGoLow++;
-	   }
-
-   // Acknowledge this interrupt to receive more interrupts from group 4
-   readHallStateFlag = 1;
-   ECap3Regs.ECCLR.bit.INT = 1;        //clears the INT flag and enable further interrupts to be generated ---global
-   PieCtrlRegs.PIEACK.all = PIEACK_GROUP4;
 }

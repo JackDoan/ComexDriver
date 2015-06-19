@@ -11,15 +11,15 @@
 #include "DSP28x_Project.h"
 Uint16 scia_read(void);
 
-__interrupt void scia_isr();
+//__interrupt void scia_isr();
 void scia_init(void);
 void scia_xmit(int a);
 void scia_msg(char *msg);
-void scia_PrintLF( void );
-void scia_Byte2Hex( Uint16 byte );
-static unsigned char btoh( unsigned char num );
+//void scia_PrintLF( void );
+//void scia_Byte2Hex( Uint16 byte );
+//static unsigned char btoh( unsigned char num );
 
-void printMenu(char** menu, int size);
+//void printMenu(char** menu, int size);
 
 
 

@@ -96,7 +96,7 @@ union SCIRXBUF_REG {
 	struct SCIRXBUF_BITS	bit;
 };
 
-struct SCIFFTX_BITS {     // bits description
+struct SCIFFTX_BITS {     // bits description //tx buffer 0b|1110|0000|0100|0000
 	Uint16	TXFFIL:5;			// 4:0	Interrupt level
 	Uint16	TXFFIENA:1;			// 5	Interrupt enable
 	Uint16	TXFFINTCLR:1;		// 6	Clear INT flag

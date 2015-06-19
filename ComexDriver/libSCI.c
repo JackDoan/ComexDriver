@@ -9,7 +9,7 @@
 void scia_init(void) {
     InitSciaGpio();
 
-    SciaRegs.SCIFFTX.all=0xE040; //tx buffer
+    SciaRegs.SCIFFTX.all=0xE040; //tx buffer 0b|1110|0000|0100|0000
     SciaRegs.SCIFFRX.all=0x2044; //rx buffer
     //SciaRegs.SCIFFRX.all=0x0000;
     SciaRegs.SCIFFCT.all=0x0;
@@ -46,20 +46,21 @@ void scia_msg(char* msg) {
     i = 0;
     while(msg[i] != '\0')
     {
-        scia_xmit(msg[i]);
-        i++;
+    	while (SciaRegs.SCIFFTX.bit.TXFFST != 0) {}
+    	SciaRegs.SCITXBUF = msg[i];
+    	i++;
     }
 }
-
+/*
 void scia_PrintLF( void ) {
         scia_msg("\r\n");
-}
+}*/
 
 
 /*
  * write bytes to the screen
  */
-
+/*
 static unsigned char btoh( unsigned char num ) {
    num = num & 0x0F;
    return ( num<10 )? num+'0' : num-10+'A';
@@ -79,7 +80,7 @@ void scia_Byte2Hex( Uint16 byte ) {
             scia_xmit( c );
         }
         scia_xmit( ' ' );
-}
+}*/
 
 
 /*
@@ -92,7 +93,7 @@ Uint16 scia_read(void)
         return (SciaRegs.SCIRXBUF.all);
 }
 
-
+/*
 void printMenu(char** menu, int size) {
 	int i = 0;
 	while (i <= size) {
@@ -101,12 +102,12 @@ void printMenu(char** menu, int size) {
 		i++;
 	}
 
-}
+}*/
 
-__interrupt void scia_isr() {
-
-
+/*__interrupt void scia_isr() {
 
 
 
-}
+
+
+}*/

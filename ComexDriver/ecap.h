@@ -17,7 +17,7 @@ void updateHallState();
 extern int HallsensorA;
 extern int HallsensorB;
 extern int HallsensorC;
-extern int Phase;
+extern Uint32 Phase;
 extern int Electrical_angle;
 extern int readHallStateFlag;
 extern int CoilA;
