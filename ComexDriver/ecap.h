@@ -30,6 +30,8 @@ extern int bGoHigh;
 extern int bGoLow;
 extern int cGoHigh;
 extern int cGoLow;
+extern int phaseHistory[36];
+extern int i;
 
 
 #endif /* ECAP_H_ */

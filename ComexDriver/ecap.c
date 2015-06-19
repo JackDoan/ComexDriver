@@ -34,6 +34,9 @@ int bGoLow;
 int cGoHigh;
 int cGoLow;
 
+int phaseHistory[36];
+int i;
+
 //How to interpret int Coil(x)
 // 4 = On High
 // 1 = On Low
@@ -52,40 +55,22 @@ void updateHallState() {
 		   {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 0; //000
-				   //CoilA = CoilB = CoilC = 0;
-				   CoilA = 4;
-				   				   CoilB = 0;
-				   				   CoilC = 0;
-				   //Phase = 0;//illegal state!
-				   
+				   Phase = 0x000; //illegal state!
 				   }
 			   else {//HallsensorC == 1
 				   Electrical_angle = 240; //001
-				   //Phase = 0b000110;
-				   //Phase = 0b011000;
-				   CoilA = 1;
-				   CoilB = 4;
-				   CoilC = 0;
-				   //Phase = 0b000101000000;
-		   			}
+				  Phase =  0x140;
+		   		  }
 		   }
 		   else //HallsensorB == 1
 		   {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 120; //010
-				   //Phase = 0b011000;
-				   CoilA = 4;
-				   CoilB = 0;
-				   CoilC = 1;
-				   //Phase = 0b010000000001;
+				   Phase = 0x401;
 				   }
 			   else{
 				   Electrical_angle = 180; //011
-				   //Phase = 0b010010;
-				   CoilA = 0;
-				   CoilB = 4;
-				   CoilC = 1;
-				   //Phase = 0b0000|0100|0001;
+				   Phase = 0x041;
 				   }
 		   }
 	   }
@@ -95,35 +80,22 @@ void updateHallState() {
 		   {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 0; //100
-				   //Phase = 0b100001;
-				   CoilA = 0;
-				   CoilB = 1;
-				   CoilC = 4;
-				   //Phase = 0b000000010100;
+				   Phase = 0x014;
 				   }
 			   else {//HallsensorC == 1
 				   Electrical_angle = 300; //101
-				   //Phase = 0b100100;
-				   CoilA = 1;
-				   CoilB = 0;
-				   CoilC = 4;
-				   //Phase = 0b000100000100;
+				   Phase = 0x104;
 				   }
 		   }
 		   else //HallsensorB == 1
 		   {
 			   if (HallsensorC == 0) {
 				   Electrical_angle = 60; //110
-				   //Phase = 0b001001;
-				   CoilA = 4;
-				   CoilB = 1;
-				   CoilC = 0;
-				   //Phase = 0b010000010000;
+				   Phase = 0x410;
 				   }
 			   else {
 				   Electrical_angle = 0; //111
-				   CoilA = CoilB = CoilC = 0;
-				   //Phase = 0;//illegal state!
+				   Phase = 0x000;
 				   }
 		   }
 
@@ -138,13 +110,20 @@ void updateHallState() {
 	//GpioCtrlRegs.GPAMUX1.all &= (~Phase); //disable things first, for safety
 	Uint32 mask = 0xFFFFF000;
 	GpioCtrlRegs.GPAMUX1.all &= mask;
-	// next, we need to OR GPAMUX1 with Phase, to set all the bits which actually are 1, to 1.
-	//TODO: examine whether or not we need more dead time
-	Phase = 0;
+
+	//keep a buffer of phase transitions
+	//phaseHistory[i] = Phase;
+	//i++;
+	//if (i == 36) {
+	//	i = 0;
+	//}
+	//end buffer
+
 	if (gogo){
-	Phase |= ((CoilC << 8)|(CoilB << 4)|(CoilA << 0));
+		//Phase = 0;
+		//Phase |= ((CoilC << 8)|(CoilB << 4)|(CoilA << 0));
+		GpioCtrlRegs.GPAMUX1.all |= Phase; //then enable
 	}
-	GpioCtrlRegs.GPAMUX1.all |= Phase; //then enable
 	EDIS;
 }
 
@@ -176,7 +155,7 @@ void InitECapRegs()
 
    ECap1Regs.ECCTL2.bit.CAP_APWM = 0;         // capture mode enable
    ECap1Regs.ECCTL2.bit.CONT_ONESHT = 0;      // continuous mode enable
-   ECap1Regs.ECCTL2.bit.STOP_WRAP = 1;        // circular buffer wraps around and starts again at 4 events
+   ECap1Regs.ECCTL2.bit.STOP_WRAP = 3;        // circular buffer wraps around and starts again at 4 events
    ECap1Regs.ECCTL1.bit.CAP1POL = 0;          // Rising edge
    ECap1Regs.ECCTL1.bit.CAP2POL = 1;          // Falling edge
    ECap1Regs.ECCTL1.bit.CAP3POL = 0;          // Rising edge
@@ -205,7 +184,7 @@ void InitECapRegs()
 
    ECap2Regs.ECCTL2.bit.CAP_APWM = 0;         // capture mode enable
    ECap2Regs.ECCTL2.bit.CONT_ONESHT = 0;      // continuous mode enable
-   ECap2Regs.ECCTL2.bit.STOP_WRAP = 1;        // circular buffer wraps around and starts again at 4 events
+   ECap2Regs.ECCTL2.bit.STOP_WRAP = 3;        // circular buffer wraps around and starts again at 4 events
    ECap2Regs.ECCTL1.bit.CAP1POL = 0;          // Rising edge
    ECap2Regs.ECCTL1.bit.CAP2POL = 1;          // Falling edge
    ECap2Regs.ECCTL1.bit.CAP3POL = 0;          // Rising edge
@@ -234,7 +213,7 @@ void InitECapRegs()
 
    ECap3Regs.ECCTL2.bit.CAP_APWM = 0;         // capture mode enable
    ECap3Regs.ECCTL2.bit.CONT_ONESHT = 0;      // continuous mode enable
-   ECap3Regs.ECCTL2.bit.STOP_WRAP = 1;        // circular buffer wraps around and starts again at 4 events
+   ECap3Regs.ECCTL2.bit.STOP_WRAP = 3;        // circular buffer wraps around and starts again at 4 events
    ECap3Regs.ECCTL1.bit.CAP1POL = 0;          // Rising edge
    ECap3Regs.ECCTL1.bit.CAP2POL = 1;          // Falling edge
    ECap3Regs.ECCTL1.bit.CAP3POL = 0;          // Rising edge
@@ -279,7 +258,7 @@ __interrupt void ecap1_isr(void)
 	     HallsensorA = 1;
 	     ECap1Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
 	     ECap1Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
-	     aGoHigh++;
+	     //aGoHigh++;
 	   }
 
 	else if(ECap1Regs.ECFLG.bit.CEVT2 || ECap1Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
@@ -287,7 +266,7 @@ __interrupt void ecap1_isr(void)
 	      HallsensorA = 0;
 		  ECap1Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
 		  ECap1Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
-		  aGoLow++;
+		 // aGoLow++;
 	   }
    // Acknowledge this interrupt to receive more interrupts from group 4
    readHallStateFlag = 1;
@@ -303,15 +282,15 @@ __interrupt void ecap2_isr(void)
 	     HallsensorB = 1;
 	     ECap2Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
 	     ECap2Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
-	     bGoHigh++;
+	     //bGoHigh++;
 	   }
 
-	  else if(ECap2Regs.ECFLG.bit.CEVT2 || ECap2Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
+	else if(ECap2Regs.ECFLG.bit.CEVT2 || ECap2Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
 	   {
 	      HallsensorB = 0;
 		  ECap2Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
 		  ECap2Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
-		  bGoLow++;
+		 // bGoLow++;
 	   }
    // Acknowledge this interrupt to receive more interrupts from group 4
    readHallStateFlag = 1;
@@ -327,15 +306,15 @@ __interrupt void ecap3_isr(void)
 	     HallsensorC = 1;
 	     ECap3Regs.ECCLR.bit.CEVT1 = 1;      //clears the CEVT1 flag condition
 	     ECap3Regs.ECCLR.bit.CEVT3 = 1;      //clears the CEVT3 flag condition
-	     cGoHigh++;
+	     //cGoHigh++;
 	   }
 
-	   else if(ECap3Regs.ECFLG.bit.CEVT2 || ECap3Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
+	else if(ECap3Regs.ECFLG.bit.CEVT2 || ECap3Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
 	   {
 	      HallsensorC = 0;
 		  ECap3Regs.ECCLR.bit.CEVT2 = 1;      //clears the CEVT2 flag condition
 		  ECap3Regs.ECCLR.bit.CEVT4 = 1;      //clears the CEVT4 flag condition
-		  cGoLow++;
+		  //cGoLow++;
 	   }
 
    // Acknowledge this interrupt to receive more interrupts from group 4
