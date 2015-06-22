@@ -125,7 +125,7 @@ void main(void) {
    ERTM;   // Enable Global realtime interrupt DBGM
    
    qep_data.init(&qep_data);
-   //int printData = 10001;
+   int printData = 10001;
    readHallStateFlag = 1;
    char writeBuffer[80] = {0};
    int lastPhase = 0;
@@ -137,7 +137,7 @@ void main(void) {
 		qep_data.calc(&qep_data);
 		if (readHallStateFlag)
 			updateHallState();
-		if (lastPhase != Phase) {
+		if ((lastPhase != Phase) && (printData)) {
 			//\033[2J\033[0;0H\r
 			sprintf(writeBuffer, "Hall State: %d\n\r", (int)Phase);
 			scia_msg(writeBuffer);

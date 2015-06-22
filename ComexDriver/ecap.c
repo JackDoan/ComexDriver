@@ -152,7 +152,7 @@ __interrupt void ecap1_isr(void)
 	     //aGoHigh++;
 	   }
 
-	else if(ECap1Regs.ECFLG.bit.CEVT2 || ECap1Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
+	if(ECap1Regs.ECFLG.bit.CEVT2 || ECap1Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
 	   {
 		  HallState &= 0b011;
 	      //HallsensorA = 0;
@@ -180,7 +180,7 @@ __interrupt void ecap2_isr(void)
 	     //bGoHigh++;
 	   }
 
-	else if(ECap2Regs.ECFLG.bit.CEVT2 || ECap2Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
+	if(ECap2Regs.ECFLG.bit.CEVT2 || ECap2Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
 	   {
 		  HallState &= 0b101;
 	      //HallsensorB = 0;
@@ -208,7 +208,7 @@ __interrupt void ecap3_isr(void)
 	     //cGoHigh++;
 	   }
 
-	else if(ECap3Regs.ECFLG.bit.CEVT2 || ECap3Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
+	if(ECap3Regs.ECFLG.bit.CEVT2 || ECap3Regs.ECFLG.bit.CEVT4) // when detect falling edge of the signal, Hall sensor state = 0
 	   {
 		  HallState &= 0b110;
 	      //HallsensorC = 0;
